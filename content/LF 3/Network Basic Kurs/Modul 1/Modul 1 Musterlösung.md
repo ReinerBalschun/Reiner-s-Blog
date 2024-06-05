@@ -1,5 +1,5 @@
 
-1. **Recherchieren Sie die Grundlagen:** Beginnen Sie damit, die Grundlagen der Netzwerkkommunikation zu verstehen. Was ist das Internet? Wie funktioniert es? Welche Arten von Kommunikationsmedien werden verwendet? **(30EXP)**  
+## 1. **Recherchieren Sie die Grundlagen:** Beginnen Sie damit, die Grundlagen der Netzwerkkommunikation zu verstehen. Was ist das Internet? Wie funktioniert es? Welche Arten von Kommunikationsmedien werden verwendet? **(30EXP)**  
     
     1. Das Internet ist eine weltweite Sammlung miteinander verbundener Netze, die zusammenarbeiten, um Informationen unter Verwendung gemeinsamer Standards. (10 EXP)  
         
