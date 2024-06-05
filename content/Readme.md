@@ -378,3 +378,12 @@ To learn more about how Obsidian parses Markdown, refer to [Obsidian Flavored M
 1. This is a footnote.[↩︎](https://publish.obsidian.md/#fnref-1-bc9bd72179afe6b9)
 
 
+````
+```mermaid
+sequenceDiagram
+    Alice->>+John: Hello John, how are you?
+    Alice->>+John: John, can you hear me?
+    John-->>-Alice: Hi Alice, I can hear you!
+    John-->>-Alice: I feel great!
+```
+````
