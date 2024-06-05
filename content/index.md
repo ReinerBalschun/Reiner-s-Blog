@@ -1,6 +1,5 @@
 ---
-title: Welcome to Quartz
+title: Willkommen zu Reiners zweite 🧠
 ---
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+Hi hier ist Reiner hoffe dir geht es gut 👾
