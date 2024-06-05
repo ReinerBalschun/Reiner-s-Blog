@@ -65,7 +65,7 @@ A: **Zu den typischen Kopplungselementen gehören:**
 
 - **Netzwerkadapter:** Ein Netzwerkadapter ist eine Hardwarekomponente, die einem Computer ermöglicht, sich mit einem Netzwerk zu verbinden. Es gibt verschiedene Arten von Netzwerkadaptern, z. B. Ethernet-Adapter, WLAN-Adapter und Powerline-Adapter.
 	 
-	 <img src="https://github.com/ReinerBalschun/Reiners-zweite-Gehirn/blob/v4/content/images/Pasted image 20240424142358.png" width="501" height="501">
+	 <img src="https://github.com/ReinerBalschun/Reiners-zweite-Gehirn/tree/v4/docs/images/Screenshots%20oder%20png/Pasted image 20240424142358.png" width="501" height="501">
 
 - **Netzwerk-Hub:** Ein Netzwerk-Hub ist ein einfaches Gerät, das mehrere Geräte miteinander verbindet. Es leitet alle Datenpakete, die an den Hub gesendet werden, an alle angeschlossenen Geräte weiter. Hubs werden heute selten verwendet, da sie Switches gegenüber weniger effizient und skalierbar sind.
 
