@@ -4,7 +4,7 @@
 # WORK IN PROGRESS! OUTDATE READER ERROR!
 
 <embed
-    src="https://github.com/ReinerBalschun/Reiners-zweite-Gehirn/blob/v4/docs/pdf/Module%201%20Communication%20in%20a%20Connected%20World%20Reiner%20Balschun%20(2).pdf"
+    src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
     type="application/pdf"
     frameBorder="0"
     scrolling="auto"
