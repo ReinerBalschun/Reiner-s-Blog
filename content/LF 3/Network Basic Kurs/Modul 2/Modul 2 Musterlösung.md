@@ -1,5 +1,5 @@
 
-1. **Verstehen Sie die Rolle von Computerhosts:** Beginnen Sie damit, die verschiedenen Rollen zu verstehen, die Computerhosts in einem Netzwerk spielen können. Wie können sie als Client, Server oder beides fungieren, und welche Software bestimmt ihre Rolle?
+# 1. **Verstehen Sie die Rolle von Computerhosts:** Beginnen Sie damit, die verschiedenen Rollen zu verstehen, die Computerhosts in einem Netzwerk spielen können. Wie können sie als Client, Server oder beides fungieren, und welche Software bestimmt ihre Rolle?
     
     1. Alle Computer, die an ein Netz angeschlossen sind, werden als Hosts bezeichnet.
     2. Computer-Hosts können als Client, Server oder beides fungieren, und die auf dem Computer installierte Software bestimmt, welche Rolle der Computer spielt.
@@ -11,7 +11,7 @@
             
               
             
-2. **Erkunden Sie P2P-Netzwerke:** Untersuchen Sie Peer-to-Peer (P2P) Netzwerke, die von kleinen Unternehmen und Privathaushalten in den Lagunen verwendet werden. Wie funktionieren sie, und warum sind sie für einfache Aufgaben wie Dateiübertragungen und das Teilen von Druckern geeignet?
+# 2. **Erkunden Sie P2P-Netzwerke:** Untersuchen Sie Peer-to-Peer (P2P) Netzwerke, die von kleinen Unternehmen und Privathaushalten in den Lagunen verwendet werden. Wie funktionieren sie, und warum sind sie für einfache Aufgaben wie Dateiübertragungen und das Teilen von Druckern geeignet?
     
     1. In einem P2P-Netz, das von kleinen Unternehmen und Privathaushalten genutzt wird, fungieren viele Computer als Server und Clients im Netz.
     2. In größeren Unternehmen werden dedizierte Server eingesetzt, um die Anzahl der Serviceanfragen zu bewältigen.
@@ -33,7 +33,7 @@
         
           
         
-3. **Betrachten Sie Netzwerkinfrastrukturen**: Erforschen Sie die Netzwerkinfrastrukturen, die in den Lagunen der Verbindungen verwendet werden. Welche Hardwarekomponenten, darunter Endgeräte, Zwischengeräte und Netzwerkmedien, sind Teil dieser Infrastrukturen?  
+# 3. **Betrachten Sie Netzwerkinfrastrukturen**: Erforschen Sie die Netzwerkinfrastrukturen, die in den Lagunen der Verbindungen verwendet werden. Welche Hardwarekomponenten, darunter Endgeräte, Zwischengeräte und Netzwerkmedien, sind Teil dieser Infrastrukturen?  
         4. Die Netzinfrastruktur ist die Plattform, die das Netz unterstützt und den stabilen und zuverlässigen Kanal bereitstellt, über den unsere Kommunikation erfolgen kann.  
         5. Die Symbole stehen für verschiedene Arten von Netzwerkgeräten.  
         6. Die Netzinfrastruktur umfasst drei Kategorien von Hardwarekomponenten, darunter Endgeräte, Zwischengeräte und Netzmedien.  
@@ -60,7 +60,7 @@
     
       
     
-4. **Identifizieren Sie ISP-Dienste:** Untersuchen Sie die Rolle von Internetdienstanbietern (ISPs) in den Lagunen. Wie stellen sie die Verbindung zwischen Heimnetzwerken und dem Internet her, und welche Verbindungsmethoden werden hier bevorzugt?
+# 4. **Identifizieren Sie ISP-Dienste:** Untersuchen Sie die Rolle von Internetdienstanbietern (ISPs) in den Lagunen. Wie stellen sie die Verbindung zwischen Heimnetzwerken und dem Internet her, und welche Verbindungsmethoden werden hier bevorzugt?
     
     1. Ein Internetdienstanbieter (ISP) stellt die Verbindung zwischen dem Heimnetzwerk und dem Internet her, indem er einen lokalen Kabelanbieter, einen Festnetztelefonanbieter, das Mobilfunknetz, das Ihren Smartphone-Dienst bereitstellt, oder einen unabhängigen Anbieter nutzt, der Bandbreite in der physischen Netzwerkinfrastruktur eines anderen Unternehmens mietet.
     2. Die Internetanbieter sind hierarchisch miteinander verbunden, so dass der Internetverkehr im Allgemeinen den kürzesten Weg von der Quelle zum Ziel nimmt.

@@ -1,5 +1,5 @@
 
-## 1. **Recherchieren Sie die Grundlagen:** Beginnen Sie damit, die Grundlagen der Netzwerkkommunikation zu verstehen. Was ist das Internet? Wie funktioniert es? Welche Arten von Kommunikationsmedien werden verwendet? **(30EXP)**  
+# 1. **Recherchieren Sie die Grundlagen:** Beginnen Sie damit, die Grundlagen der Netzwerkkommunikation zu verstehen. Was ist das Internet? Wie funktioniert es? Welche Arten von Kommunikationsmedien werden verwendet? **(30EXP)**  
     
     1. Das Internet ist eine weltweite Sammlung miteinander verbundener Netze, die zusammenarbeiten, um Informationen unter Verwendung gemeinsamer Standards. (10 EXP)  
         
@@ -10,7 +10,7 @@
     
       
     
-2. **Identifizieren Sie Kommunikationsmittel:** Erstellen Sie eine Liste der verschiedenen Kommunikationsmittel, die in EtherNetica und der realen Welt verwendet werden. Dies könnte alles von Telefonleitungen bis zu Smart-Geräten und RFID-Tags umfassen. **(40EXP)**  
+# 2. **Identifizieren Sie Kommunikationsmittel:** Erstellen Sie eine Liste der verschiedenen Kommunikationsmittel, die in EtherNetica und der realen Welt verwendet werden. Dies könnte alles von Telefonleitungen bis zu Smart-Geräten und RFID-Tags umfassen. **(40EXP)**  
     
     1. Es gibt überall Geräte, mit denen Sie mit denen Sie täglich zu tun haben und die mit dem Internet verbunden sind. ((10EXP)  
         
@@ -21,14 +21,14 @@
     
       
     
-3. **Verstehen Sie Datenklassifikation:** Erforschen Sie die Kategorien, die zur Klassifizierung von persönlichen Daten verwendet werden. Welche Unterschiede gibt es zwischen volunteered data, observed data und inferred data? **(30EXP)**  
+# 3. **Verstehen Sie Datenklassifikation:** Erforschen Sie die Kategorien, die zur Klassifizierung von persönlichen Daten verwendet werden. Welche Unterschiede gibt es zwischen volunteered data, observed data und inferred data? **(30EXP)**  
     
     1. Die Kategorien, die zur Klassifizierung Die Kategorien, die zur Klassifizierung personenbezogener Daten verwendet werden, sind freiwillige Daten (10EXP), beobachtete Daten (10EXP) und abgeleitete Daten. (10EXP)  
         
     
       
     
-4. **Betrachten Sie Bandbreite und Durchsatz:** Untersuchen Sie den Begriff "Bandbreite" und wie er die Kapazität eines Kommunikationsmediums zur Datenübertragung beeinflusst. Erklären Sie den Unterschied zwischen Bandbreite und Durchsatz. **(60EXP)**  
+# 4. **Betrachten Sie Bandbreite und Durchsatz:** Untersuchen Sie den Begriff "Bandbreite" und wie er die Kapazität eines Kommunikationsmediums zur Datenübertragung beeinflusst. Erklären Sie den Unterschied zwischen Bandbreite und Durchsatz. **(60EXP)**  
     
     1. Die Bandbreite ist die Kapazität eines Mediums zur Übertragung von Daten. (10EXP)  
         
@@ -45,7 +45,7 @@
     
       
     
-5. **Faktoren, die die Durchsatz beeinflussen:** Erkunden Sie die Faktoren, die die tatsächliche Durchsatzrate in einem Netzwerk beeinflussen können. Dies könnte die Datenmenge, die Latenz und andere Einflüsse umfassen. **(40EXP)**  
+# 5. **Faktoren, die die Durchsatz beeinflussen:** Erkunden Sie die Faktoren, die die tatsächliche Durchsatzrate in einem Netzwerk beeinflussen können. Dies könnte die Datenmenge, die Latenz und andere Einflüsse umfassen. **(40EXP)**  
     1. Der Durchsatz weicht in der Regel von der angegebenen Bandbreite ab. (10EXP)  
         
     2. Viele Faktoren beeinflussen den Durchsatz, darunter:
