@@ -1,5 +1,5 @@
 ---
-title: '"<% tp.file.title %>"'
+title: 'Bugs'
 ---
 > [!bug] 05.06.2024 10 PM (GMT+2)
 > Probleme mit dem Anzeigen von PDFs in HTML!

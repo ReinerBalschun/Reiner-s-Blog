@@ -1,5 +1,5 @@
 ---
-title: '"<% tp.file.title %>"'
+title: 'Feature Ideen'
 ---
 
 > [!todo] Recent Files Feature
