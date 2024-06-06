@@ -15,5 +15,9 @@ Hi hier ist Reiner hoffe dir geht es gut 👾.
 
 
 
+> [!changelog] Update 06.06.2024
+> Habe nun Gestern noch versucht die Problematik mit der PDF Reader zu verbessern. (siehe [[Bugs]])
+
+
 
 
