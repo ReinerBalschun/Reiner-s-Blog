@@ -6,7 +6,7 @@ title: 'Feature Ideen'
 > diesen Quellcode in "*quartz.layout.ts*" nach dem "Component.DesktopOnly" in "PageLayout" 
 > **Brauche aber noch etwas Zeit beim ersetzen der anderen Plugins!**
 > 
-> ```
+> ```typescript
 > Component.RecentNotes({
 >         title: "Recent Writing",
 >         limit: 4,
