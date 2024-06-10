@@ -1,5 +1,5 @@
 
-# **Recherchieren Sie die Grundlagen 
+# **Recherchieren Sie die Grundlagen**
 
 **Beginnen Sie damit, die Grundlagen der Netzwerkkommunikation zu verstehen. Was ist das Internet? Wie funktioniert es? Welche Arten von Kommunikationsmedien werden verwendet?**  
 
@@ -11,7 +11,7 @@
         
     
 
-# **Identifizieren Sie Kommunikationsmittel
+# **Identifizieren Sie Kommunikationsmittel**
 
 **Erstellen Sie eine Liste der verschiedenen Kommunikationsmittel, die in EtherNetica und der realen Welt verwendet werden. Dies könnte alles von Telefonleitungen bis zu Smart-Geräten und RFID-Tags umfassen.**
     
@@ -21,13 +21,13 @@
 - Außerhalb Ihres Hauses gibt es intelligente Autos, RFID-Etiketten, Sensoren und Aktoren und sogar medizinische Geräte, die verbunden werden können.  
 
     
-# **Verstehen Sie Datenklassifikation:** 
+# **Verstehen Sie Datenklassifikation**
 
 **Erforschen Sie die Kategorien, die zur Klassifizierung von persönlichen Daten verwendet werden. Welche Unterschiede gibt es zwischen volunteered data, observed data und inferred data?**
 
 - Die Kategorien, die zur Klassifizierung Die Kategorien, die zur Klassifizierung personenbezogener Daten verwendet werden, sind freiwillige Daten, beobachtete Daten und abgeleitete Daten.  
     
-# **Betrachten Sie Bandbreite und Durchsatz
+# **Betrachten Sie Bandbreite und Durchsatz**
 
 **Untersuchen Sie den Begriff "Bandbreite" und wie er die Kapazität eines Kommunikationsmediums zur Datenübertragung beeinflusst. Erklären Sie den Unterschied zwischen Bandbreite und Durchsatz.**  
     
@@ -44,7 +44,7 @@
 - Der Durchsatz entspricht jedoch in der Regel nicht der angegebenen Bandbreite, was auf mehrere Faktoren zurückzuführen ist.
         
     
-# **Faktoren, die die Durchsatz beeinflussen:**
+# **Faktoren, die die Durchsatz beeinflussen**
 
 **Erkunden Sie die Faktoren, die die tatsächliche Durchsatzrate in einem Netzwerk beeinflussen können. Dies könnte die Datenmenge, die Latenz und andere Einflüsse umfassen.**
 

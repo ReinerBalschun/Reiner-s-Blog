@@ -1,5 +1,5 @@
 
-# **Frage 1
+# Frage 1
 
 **Welche Kriterien sind wichtig bei der Auswahl eines Netzwerkmediums?**
 
@@ -10,31 +10,31 @@ Die wichtigen Kriterien bei der Auswahl eines Netzwerkmediums sind:
 - Übertragungsgeschwindigkeit
 - Kosten der Installation
 
-# **Frage 2
+# Frage 2
 
 **Erklären Sie die Bedeutung der maximalen Übertragungsdistanz eines Netzwerkmediums. Warum ist dies ein wichtiger Faktor?**
 
 Die maximale Übertragungsdistanz gibt an, wie weit ein Netzwerkmedium Daten erfolgreich übertragen kann, bevor das Signal zu schwach wird. Dies ist wichtig, um sicherzustellen, dass Daten über die benötigte Entfernung gesendet werden können, ohne Verluste oder Signalstörungen zu erleiden.
 
-# **Frage 3
+# Frage 3
 
 **Welche Umweltfaktoren sollten bei der Installation von Netzwerkmedien berücksichtigt werden?**
 
 Umweltfaktoren wie Feuchtigkeit, Temperatur, elektromagnetische Interferenzen und physische Hindernisse sollten bei der Installation von Netzwerkmedien berücksichtigt werden, da sie die Leistung und Zuverlässigkeit des Netzwerks beeinflussen können.
 
-# **Frage 4
+# Frage 4
 
 **Welche Rolle spielt die Übertragungsgeschwindigkeit bei der Auswahl eines Netzwerkmediums?**
 
 Die Übertragungsgeschwindigkeit ist entscheidend, um sicherzustellen, dass die Daten in akzeptabler Zeit übertragen werden können. Je nach den Anforderungen des Netzwerks müssen möglicherweise höhere Geschwindigkeiten für effiziente Kommunikation gewählt werden.
 
-# **Frage 5
+# Frage 5
 
 **Warum ist der Installationskostenfaktor bei der Auswahl eines Netzwerkmediums relevant?**
 
 Die Kosten für die Installation sind wichtig, um sicherzustellen, dass das gewählte Netzwerkmedium im Budget bleibt. Je nach finanziellen Möglichkeiten und Anforderungen des Netzwerks kann dies die Auswahl beeinflussen.
 
-# **Frage 6
+# Frage 6
 
 **Beschreiben Sie die drei gängigsten Arten von Netzwerkkabeln: verdrehtes Paar, Koaxialkabel und Glasfaser. Welche Vor- und Nachteile haben sie?**
 
@@ -45,7 +45,7 @@ Die Kosten für die Installation sind wichtig, um sicherzustellen, dass das gew�
 - **Glasfaser:** Glasfaserkabel verwenden Lichtsignale zur Datenübertragung und bieten hohe Geschwindigkeiten und große Übertragungsdistanzen. Sie sind jedoch teurer und empfindlicher gegenüber physischen Beschädigungen.  
     
 
-# **Frage 7
+# Frage 7
 
 **In welchen Situationen würden Sie eher ein verdrehtes Paar, Koaxialkabel oder Glasfaser als Netzwerkmedium empfehlen?**
 

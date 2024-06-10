@@ -1,5 +1,5 @@
 
-# **Aufgabe 1
+# Aufgabe 1
 
 **Unicast vs. Broadcast vs. Multicast**
 
@@ -9,7 +9,7 @@ Broadcast-Übertragung erfolgt, wenn ein Gerät Nachrichten an alle Geräte im N
 
 Multicast-Übertragung ermöglicht es einem Absender, Daten an ausgewählte Gruppen von Hosts (many-to-many) zu senden. Ein Multicast-Paket hat eine Ziel-IP-Adresse, die auf eine Multicast-Gruppe verweist.
 
-# **Aufgabe 2
+# Aufgabe 2
 
 **Adressklassen und -bereiche**
 
@@ -21,7 +21,7 @@ Loopback-Adressen, insbesondere 127.0.0.1, werden für die Kommunikation eines H
 
 Link-Local-Adressen (APIPA) wie 169.254.0.0 bis 169.254.255.254 sind selbst zugewiesene Adressen, die verwendet werden, wenn keine DHCP-Konfiguration verfügbar ist.
 
-# **Aufgabe 3
+# Aufgabe 3
 
 **IP-Adressierung und NAT**
 
@@ -31,7 +31,7 @@ NAT stellt sicher, dass private Adressen nicht im globalen Internet einzigartig 
 
 NAT kann dazu beitragen, IPv4-Adressknappheit zu bewältigen und gleichzeitig die Sicherheit erhöhen.
 
-# **Aufgabe 4
+# Aufgabe 4
 
 **Adressvergabe**
 
@@ -39,7 +39,7 @@ Die Adressvergabe erfolgt in IPv4-Netzwerken in der Regel über den Dynamic Host
 
 DHCP-Server stellen sicher, dass IP-Adressen effizient und ohne Konflikte verteilt werden.
 
-# **Aufgabe 5
+# Aufgabe 5
 
 **Broadcast-Domains und Subnetting**
 

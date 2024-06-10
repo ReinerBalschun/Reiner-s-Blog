@@ -1,5 +1,5 @@
 
-# **Verstehen Sie die Rolle von Computerhosts
+# Verstehen Sie die Rolle von Computerhosts
 
 **Beginnen Sie damit, die verschiedenen Rollen zu verstehen, die Computerhosts in einem Netzwerk spielen können. Wie können sie als Client, Server oder beides fungieren, und welche Software bestimmt ihre Rolle?**
     
@@ -14,7 +14,7 @@
               
 
 
-# **Erkunden Sie P2P-Netzwerke
+# Erkunden Sie P2P-Netzwerke
 
 **Untersuchen Sie Peer-to-Peer (P2P) Netzwerke, die von kleinen Unternehmen und Privathaushalten in den Lagunen verwendet werden. Wie funktionieren sie, und warum sind sie für einfache Aufgaben wie Dateiübertragungen und das Teilen von Druckern geeignet?**
     
@@ -38,7 +38,7 @@
 
 
 
-# **Betrachten Sie Netzwerkinfrastrukturen
+# Betrachten Sie Netzwerkinfrastrukturen
 
 **Erforschen Sie die Netzwerkinfrastrukturen, die in den Lagunen der Verbindungen verwendet werden. Welche Hardwarekomponenten, darunter Endgeräte, Zwischengeräte und Netzwerkmedien, sind Teil dieser Infrastrukturen?**
 
@@ -69,7 +69,7 @@
       
     
 
-# **Identifizieren Sie ISP-Dienste
+# Identifizieren Sie ISP-Dienste
 
 **Untersuchen Sie die Rolle von Internetdienstanbietern (ISPs) in den Lagunen. Wie stellen sie die Verbindung zwischen Heimnetzwerken und dem Internet her, und welche Verbindungsmethoden werden hier bevorzugt?**
     
