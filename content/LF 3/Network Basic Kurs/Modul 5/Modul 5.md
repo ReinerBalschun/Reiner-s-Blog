@@ -1,5 +1,6 @@
 ---
 "type:": Modul
+draft: true
 ---
 
 > [!bug]
