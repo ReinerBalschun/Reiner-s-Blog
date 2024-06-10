@@ -15,4 +15,4 @@ Frage 4:
 
 ![[Pasted image 20240409131659.png]]
 
-(bei der letzten Aufgabe habe ich nur den Fehler gehabt das ich die ":0:" nicht gesehen hatte nach ":5:" richtige Lösung steht daneber ja 🤗)
+(bei der letzten Aufgabe habe ich nur den Fehler gehabt das ich die ":0:" nicht gesehen hatte nach ":5:" richtige Lösung steht daneben 🤗)

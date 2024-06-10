@@ -1,6 +1,9 @@
 ---
 "type:": Modul
+draft: true
 ---
-# WORK IN PROGRESS! OUTDATE READER ERROR!
+
+> [!bug]
+> # WORK IN PROGRESS! OUTDATE READER ERROR!
 
 ![[Modul 2 - Reiner Balschun.pdf]]
