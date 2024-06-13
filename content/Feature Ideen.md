@@ -26,6 +26,6 @@ title: 'Feature Ideen'
 >     Component.DesktopOnly(Component.TableOfContents()),
 
 
-> [!todo] Liste mit allen Notes
+> [!todo]- Liste mit allen Notes
 > **WORK IN PROGRESS!**
 
