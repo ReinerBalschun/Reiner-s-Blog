@@ -28,14 +28,14 @@ const config: QuartzConfig = {
       },
       colors: {
         lightMode: {
-          light: "#faf8f8", /* Helles Weiß */
-          lightgray: "#f2f2f2", /* Helles Hellgrau */
-          gray: "#e0e0e0", /* Mittleres Hellgrau */
-          darkgray: "#cfcfcf", /* Dunkles Hellgrau */
-          dark: "#a8a8a8", /* Dunkles Grau */
-          secondary: "#284b63", /* Akzentfarbe (aus Darkmode übernommen) */
-          tertiary: "#84a59d", /* Akzentfarbe (aus Darkmode übernommen) */
-          highlight: "rgba(143, 159, 169, 0.15)", /* Highlightfarbe (aus Darkmode übernommen) */
+          light: "#f7f9fe", /* Helles Hellblau */
+          lightgray: "#e6edf6", /* Mittleres Hellblau */
+          gray: "#d1d9e1", /* Helles Grau */
+          darkgray: "#b0bec5", /* Dunkles Grau */
+          dark: "#80868c", /* Dunkles Grau */
+          secondary: "#00BCD4", /* Akzentfarbe (Teal) */
+          tertiary: "#FF4081", /* Akzentfarbe (Hot Pink) */
+          highlight: "rgba(0, 188, 212, 0.15)", /* Teal mit Transparenz */
         },
         darkMode: {
           light: "#2B2B2B", /* Black */
