@@ -4,10 +4,12 @@ Based on [Quartz v4](https://quartz.jzhao.xyz). Content is in `/content`
 
 ## Developing
 
->[!NOTE]
-> NodeJS v18.14+ `node -v`, 
-> NPM v9.3.1+ `npm -v`, 
-> Git `git --version`, 
+>[!IMPORTANT]
+> NodeJS v18.14+ `node -v`
+>
+> NPM v9.3.1+ `npm -v`
+>
+> Git `git --version`
 
 - Install dependencies: `npm i`
 - Run locally `npx quartz build --serve`
