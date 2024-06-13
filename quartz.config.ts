@@ -23,19 +23,19 @@ const config: QuartzConfig = {
       cdnCaching: true,
       typography: {
         header: "Nabla",
-        body: "Fira Code",
+        body: "PT Serif",
         code: "IBM Plex Mono",
       },
       colors: {
         lightMode: {
-          light: "#f7f9fe", /* Helles Hellblau */
-          lightgray: "#e6edf6", /* Mittleres Hellblau */
-          gray: "#d1d9e1", /* Helles Grau */
-          darkgray: "#b0bec5", /* Dunkles Grau */
-          dark: "#80868c", /* Dunkles Grau */
-          secondary: "#00BCD4", /* Akzentfarbe (Teal) */
-          tertiary: "#FF4081", /* Akzentfarbe (Hot Pink) */
-          highlight: "rgba(0, 188, 212, 0.15)", /* Teal mit Transparenz */
+          light: "#f7f5eb",
+          lightgray: "#e0ddd7",
+          gray: "#A09D98",
+          darkgray: "#5c534b",
+          dark: "#242220",
+          secondary: "#635b8f",
+          tertiary: "#69a3d6",
+          highlight: "rgba(143, 159, 169, 0.15)",
         },
         darkMode: {
           light: "#161618",
