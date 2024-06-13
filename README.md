@@ -23,3 +23,6 @@ Based on [Quartz v4](https://quartz.jzhao.xyz). Content is in `/content`
 
 >[!NOTE]
 > a note
+> NodeJS v18.14+ | `node -v`
+> NPM v9.3.1+ | `npm -v`
+> Git | `git --version`
