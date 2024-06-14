@@ -11,11 +11,9 @@ const config: QuartzConfig = {
     pageTitle: "Reiners 🥈 🧠",
     enableSPA: true,
     enablePopovers: true,
-    analytics: {
-      provider: "plausible",
-    },
+    analytics: null,
     locale: "de-DE",
-    baseUrl: "reinerbalschun.github.io",
+    baseUrl: "reinerbalschun.github.io/Reiners-zweite-Gehirn",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",
     theme: {
@@ -28,14 +26,14 @@ const config: QuartzConfig = {
       },
       colors: {
         lightMode: {
-          light: "#f7f5eb",
+          light: "#fcf5e5",
           lightgray: "#e0ddd7",  // für suchfeld
           gray: "#A09D98",
           darkgray: "#5c534b",
           dark: "#242220",
           secondary: "#635b8f", // globale link farbe
           tertiary: "#69a3d6",
-          highlight: "rgba(143, 159, 169, 0.15)",
+          highlight: "rgba(252, 245, 229, 0.95)",
         },
         darkMode: {
           light: "#161618",
