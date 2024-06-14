@@ -37,7 +37,7 @@ Führen Sie die folgenden Protokolle tabellarisch auf. Ordnen Sie die OSI-Schich
 
 Welche Informationen sind zur Konfiguration eines E-Mail-Accounts in einem Client notwendig? Suchen Sie die Protokolle und Einstellungen zur Konfiguration Ihrer Schul-E-Mail-Adresse in einem Client heraus.
 
-![[Pasted image 20240424154612.png]]
+![[./Pasted image 20240424154612.png]]
 
 
 Man braucht den IMAP-Server auf Port 143 um die Email empfangen zu können & den SMTP-Server auf Port 25 um Emails im Namen des Email Kontos versenden zu können.

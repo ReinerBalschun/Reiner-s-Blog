@@ -88,7 +88,7 @@ Sie werden zur Dokumentation eines Netzwerks herangezogen, um die Ist-Analyse du
 
 Ermitteln Sie die Subnetzmaske.
 
-![[20240425_133010.jpg]]
+![[./20240425_133010.jpg]]
 
 # **Aufgabe 8**
 

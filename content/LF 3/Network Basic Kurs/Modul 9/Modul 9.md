@@ -66,5 +66,3 @@ In großen Netzwerken kann es problematisch sein, wenn es zu viele Geräte in ei
 Um diese Probleme zu lösen, werden in großen Netzwerken oft Subnetze eingesetzt. Subnetze ermöglichen die Aufteilung des Netzwerks in mehrere separate Broadcast-Domains. Dadurch können Broadcast-Nachrichten auf bestimmte Bereiche begrenzt werden, was die Netzwerkleistung verbessert, Sicherheitsrisiken reduziert und die Fehlerbehebung erleichtert.
 
 ![[Pasted image 20240228075728.png]]
-
-[[Modul 9.pdf]]

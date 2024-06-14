@@ -4,7 +4,7 @@
 Beschreiben Sie den Aufbau mithilfe von Netzwerk-Komponenten, die das Netzwerk in folgendem Beispiel abbilden. Welche teilweise auch nicht eingezeichneten/nicht explizit genannten Kopplungselemente werden für das Netzwerk benötigt?
 
 
-![[Pasted image 20240425081246.png]]
+![[./Pasted image 20240425081246.png]]
 
 
 Der Netzwerkaufbau läuft wie folgt ab: 

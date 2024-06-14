@@ -1,12 +1,10 @@
 ---
 type:: LF 3
-
+draft: true
 ---
 
-> [!bug]
-> # WORK IN PROGRESS! OUTDATE READER ERROR!
 
-# Modul 1
+# [[# Modul 1]](./Module 1 Communication in a Connected World Reiner Balschun (2).pdf) 
 
 ![[Module 1 Communication in a Connected World Reiner Balschun (2).pdf]]
 # Modul 2

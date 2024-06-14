@@ -25,5 +25,3 @@ A: Dann ist dem Router nicht möglich mit anderen Netzwerken zu kommunizieren.
 NAT (Network Address Translation) ist der Zauber, der private Adressen in internet-routbare Adressen verwandelt und umgekehrt. Könnt ihr den Prozess von privaten zu öffentlichen Adressen und umgekehrt erklären? Wie agiert der drahtlose Router als Vermittler?
 
 A: Die Umwandlung der privaten IP-Adresse zu einer öffentlichen IP-Adresse habe schon quasi in Aufgabe 2 erklärt ich addiere jetzt nur den Punkt mit NAT. Durch NAT (Network Address Translation) erstellt der Router eine Tabelle um alle Subnetze innerhalb des Netzwerkes eine Öffentliche IP zu geben und es gleichzeitig zu speichern damit er später wenn Traffic rein oder raus kommt weiß in welches Subnetznetz er das Paket senden muss.
-
-[[Modul 12.pdf]]
