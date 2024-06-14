@@ -18,4 +18,5 @@ Hi hier ist Reiner hoffe dir geht es gut 👾.
 > [!changelog]- Update 10.06.2024
 > Habe nun die Notizen erst einmal heruntergenommen die den PDF Fehler haben, solange ich keine Lösung gefunden habe. **Modul 1 habe ich für Update und Info Zwecke online gelassen!**
 
-
+> [!changelog]- Update 14.06.2024
+> Lösung zu allen Bugs gefunden siehe [[Bugs]]
