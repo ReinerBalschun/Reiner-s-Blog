@@ -19,5 +19,5 @@ Based on [Quartz v4](https://quartz.jzhao.xyz). Content is in `/content`
 
 - Copy the [.yml](https://quartz.jzhao.xyz/hosting#github-pages) file into your Github repository
 - Go to "Settings" in your Github account and click in sidebar "Pages" under "Source" "Github Actions"
-- Now all Commits should automatically doploy into your website
+- Now all Commits should automatically deploy into your website
 - (Optional) rename your default domain into your own custom domain  
