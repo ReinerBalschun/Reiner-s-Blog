@@ -29,3 +29,5 @@ title: 'Feature Ideen'
 > [!todo]- Liste mit allen Notes
 > **WORK IN PROGRESS!**
 
+> [!todo]- Kommentare 
+> läuft über  [giscus](https://giscus.app/de)
