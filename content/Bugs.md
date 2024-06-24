@@ -13,4 +13,4 @@ title: 'Bugs'
 
 
 > [!success]- 14.06.2024 12AM (GMT+2)
-> Alle Anzeigefehler aller "attachments" egal ob .pdf, png usw. habe gefixt bekommen 👾
+> Alle Anzeigefehler aller "attachments" egal ob .pdf, png usw. gefixt bekommen 👾
