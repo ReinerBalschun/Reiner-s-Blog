@@ -12,7 +12,7 @@ const config: QuartzConfig = {
     enableSPA: true,
     enablePopovers: true,
     analytics: null,
-    locale: "de-DE",
+    locale: "en-US",
     baseUrl: "reinerbalschun.github.io/Reiners-zweite-Gehirn",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",

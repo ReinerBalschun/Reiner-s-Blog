@@ -16,7 +16,7 @@ export default ((opts?: Options) => {
         <hr />
         <p>
           {i18n(cfg.locale).components.footer.createdWith}{" "}
-           ❤️ und 🫠
+           ❤️ and 🫠
            <br/>
             © {year} Reiner Balschun
         </p>
