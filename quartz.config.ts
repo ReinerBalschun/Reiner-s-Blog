@@ -20,7 +20,7 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Nabla",
+        header: "Bebas Neue",
         body: "Source Sans Pro",
         code: "IBM Plex Mono",
       },
