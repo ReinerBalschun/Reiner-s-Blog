@@ -5,7 +5,7 @@ The plan is to manage everything via containers so that everything can be easily
 
 ### Prerequisites
 
-*Info: for testing purposes I did not use a Pi but a DebianVM and connected to the machine via ssh!*
+*Info: for testing purposes I did not use a Pi but a DebianVM and connected to the machine via ssh!* 
 
 ### Installation of IOTstack and Portainer setup
 
