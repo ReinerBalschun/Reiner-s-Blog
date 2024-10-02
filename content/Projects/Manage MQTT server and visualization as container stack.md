@@ -20,7 +20,7 @@ sudo apt install curl
 2. Then install IOTstack via curl and restart (if not automatically by install script):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash 
+sudo curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash 
 sudo shutdown -r now
 ```
 
