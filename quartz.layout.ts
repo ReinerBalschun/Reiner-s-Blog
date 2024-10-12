@@ -26,7 +26,7 @@ export const defaultContentPageLayout: PageLayout = {
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
-    Component.Darkmode(),
+    /*Component.Darkmode(),*/ // ist damit der Button nicht zu sehen ist für lightmode!
     Component.DesktopOnly(Component.Explorer()),   
   ],
   right: [
