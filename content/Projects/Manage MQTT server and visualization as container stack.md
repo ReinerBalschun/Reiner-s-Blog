@@ -54,7 +54,7 @@ docker ps
 docker run --rm -v /home/*User*/IOTstack/volumes/portainer-ce/data:/data portainer/helper-reset-password
 ```
 
-### InfluxDB, NedRed & Grafana configuration
+### InfluxDB, Nodered & Grafana configuration
 
 1. now the database must be created, which stores all data that is published to the Brocker to the specific topic “Temp”:
 
