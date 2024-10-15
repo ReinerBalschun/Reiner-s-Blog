@@ -1,5 +1,6 @@
 ---
 title: 'Feature Ideen'
+tags: [Ideen, Feature]
 ---
 
 > [!todo] Recent Files Feature
