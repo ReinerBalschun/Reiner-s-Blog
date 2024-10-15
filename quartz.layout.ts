@@ -5,6 +5,19 @@ import * as Component from "./quartz/components"
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
+  afterBody: [ Component.Comments({
+    provider: 'giscus',
+    options: {
+      // from data-repo
+      repo: 'ReinerBalschun/Reiners-zweite-Gehirn',
+      // from data-repo-id
+      repoId: 'R_kgDOMFWvHQ',
+      // from data-category
+      category: 'Announcements',
+      // from data-category-id
+      categoryId: 'DIC_kwDOMFWvHc4CjVdB',
+    }
+  }),],
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/ReinerBalschun",
@@ -27,12 +40,12 @@ export const defaultContentPageLayout: PageLayout = {
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
     /*Component.Darkmode(),*/ // ist damit der Button nicht zu sehen ist für lightmode!
-    Component.DesktopOnly(Component.Explorer()),   
+    Component.DesktopOnly(Component.Explorer()),
   ],
   right: [
     Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
+    /*Component.Backlinks(),*/ // benutze keine Backlinks
   ],
 }
 
