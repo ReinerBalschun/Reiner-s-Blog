@@ -20,3 +20,23 @@ Hi hier ist Reiner hoffe dir geht es gut 👾.
 
 > [!changelog]- Update 14.06.2024
 > Lösung zu allen Bugs gefunden siehe [[Bugs]]
+
+> [!changelog]- Update 12.10.2024
+> Hab die letzte Wochen an einem neuen Projekt gearbeitet Doku findet ihr [hier](Projects/MQTT%20Server%20und%20Visualisierung%20als%20Container%20Stack%20verwalten.md)
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="ReinerBalschun/Reiners-zweite-Gehirn"
+        data-repo-id="R_kgDOMFWvHQ"
+        data-category="General"
+        data-category-id="DIC_kwDOMFWvHc4CjVdC"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="de"
+        crossorigin="anonymous"
+        async>
+</script>

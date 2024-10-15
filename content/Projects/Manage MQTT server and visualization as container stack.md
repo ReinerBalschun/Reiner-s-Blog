@@ -20,7 +20,7 @@ sudo apt install curl
 2. Then install IOTstack via curl and restart (if not automatically by install script):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash 
+sudo curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash 
 sudo shutdown -r now
 ```
 
@@ -54,7 +54,7 @@ docker ps
 docker run --rm -v /home/*User*/IOTstack/volumes/portainer-ce/data:/data portainer/helper-reset-password
 ```
 
-### InfluxDB, NedRed & Grafana configuration
+### InfluxDB, Nodered & Grafana configuration
 
 1. now the database must be created, which stores all data that is published to the Brocker to the specific topic “Temp”:
 
@@ -194,3 +194,20 @@ time                value
 	4. **Important** that this message appears when you press “Save & test”:![[Pasted image 20240920143235.png]]
 	5. Now set the dashboard to user-defined, it could look like this, for example:![[Pasted image 20240920143520.png]]
 
+If you want to mount the container to customize something:
+```bash
+docker exec -it <container> bash
+```
+If pw forgotten in grafana via portainer bash!:
+```bash
+grafana cli --homepath "/usr/share/grafana" admin reset-admin-password <new password>
+```
+To edit files that are in a Docker container simply:
+```bash
+docker cp <container>:/path/to/file.ext .
+```
+to create a copy on the local computer (in the current directory). Then edit the file locally with your preferred editor and then run
+```bash
+docker cp file.ext <container>:/path/to/file.ext
+```
+to replace the old file.
