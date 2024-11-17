@@ -480,7 +480,7 @@ If you use a “Gauge” chart in Grafana, it is also important to select the co
 ### Functional explanation of the TMP35 sensor & ADS1115 analog-digital-converter
 #### Conversion formula from voltage to temperature **TMP35**
 
-#### 1. **Basis of the formula**
+##### 1. **Basis of the formula**
 
 The **TMP35 output voltage** is linear to the measured temperature:
 $$
@@ -497,14 +497,14 @@ This formula describes the conversion from the output voltage (in volts) to the 
 
 ---
 
-### 2. **Breakdown of the formula**
+##### 2. **Breakdown of the formula**
 
-#### a. **Offset of 0.5 V**:
+###### a. **Offset of 0.5 V**:
 
 - According to the sensor documentation, the output voltage of the TMP35 at **0 °C** is exactly **0.5 V**.
 - To calculate the temperature, the measured voltage is therefore reduced by this value: 
   $$ V_{\text{out}} - 0,5 $$
-#### b. **Scaling factor of 100**:
+###### b. **Scaling factor of 100**:
 
 - The TMP35 has a sensitivity of **10 mV/°C** (millivolts per degree Celsius).
 - This means that a change in voltage of **1 V** corresponds to a temperature change of **100 °C**.
@@ -514,7 +514,7 @@ This formula describes the conversion from the output voltage (in volts) to the 
   - In the formula, the scaling factor ($m$) was then changed to $T = \frac{}{0,01}$
   
 ---
-### 3. **Example formula**
+##### 3. **Example formula**
 
 Assume that the TMP35 supplies an output voltage of **0.75 V**:
 
@@ -526,14 +526,14 @@ $$0,25×100=25°C$$
 The measured temperature is therefore **25 °C**.
 
 ---
-### 4. **Additional information**
+##### 4. **Additional information**
 
 - The TMP35 is designed for a supply voltage of **3 to 5.5 V**. The conversion formula remains valid within this range.
 - Temperature range: The TMP35 can measure temperatures from **-10 °C to +125 °C**. The linearity of the output voltage is maintained.
 
 #### Functional explanation of the ADS1115 analog-to-digital converter
 
-### 1. **Basic principle of the ADS1115**
+##### 1. **Basic principle of the ADS1115**
 
 The ADS1115 operates as follows:
 
@@ -542,11 +542,11 @@ The ADS1115 operates as follows:
 3. The digital value is transmitted to the host (Raspberry Pi) via the I²C interface.
 
 ---
-### 2. **Voltage reference (V_REF)**
+##### 2. **Voltage reference (V_REF)**
 
 The ADS1115 uses an internal reference voltage (V_REF), which is **2.048 V**. This reference is used to convert the measured signal into a digital value.
 
-#### **Gain Amplifier (PGA)**
+###### **Gain Amplifier (PGA)**
 
 - The ADS1115 has a programmable gain amplifier (PGA) that adjusts the measuring range.
 - The gain influences the **Full-Scale Range (FSR)**, i.e. the maximum voltage range that the ADC can measure.
@@ -560,7 +560,7 @@ The ADS1115 uses an internal reference voltage (V_REF), which is **2.048 V**. Th
 
 ---
 
-### 3. **Formula for voltage calculation**
+##### 3. **Formula for voltage calculation**
 
 The digital value supplied by the ADS1115 depends on the measured voltage and the FSR. The formula is as follows:
 
@@ -576,7 +576,7 @@ $$ voltage (V) = \frac{{digital~value}~×~FSR}{2^{15}} $$
 - If the digital value is $16384$:
   $$ voltage (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
 
-#### Interaction with the TMP35 sensor:
+##### 4. **Interaction with the TMP35 sensor**:
 
 Set **FSR**:
 

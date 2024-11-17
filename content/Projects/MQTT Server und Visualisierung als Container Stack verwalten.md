@@ -488,7 +488,7 @@ Wenn man ein "Gauge" Chart in Grafana verwendet ist es auch wichtig in den "Valu
 ### Funktionserklärung Sensor TMP35 & Analog-Digital-Wandler ADS1115
 #### Umrechnungsformel von Spannung zu Temperatur **TMP35**
 
-#### 1. **Grundlage der Formel**
+##### 1. **Grundlage der Formel**
 
 Die **TMP35-Ausgangsspannung** ist linear zur gemessenen Temperatur:
 $$
@@ -505,14 +505,14 @@ Diese Formel beschreibt die Umrechnung von der Ausgangsspannung (in Volt) zur Te
 
 ---
 
-### 2. **Aufschlüsselung der Formel**
+##### 2. **Aufschlüsselung der Formel**
 
-#### a. **Offset von 0,5 V**:
+###### a. **Offset von 0,5 V**:
 
 - Laut der Doku des Sensors beträgt die Ausgangsspannung des TMP35 bei **0 °C** genau **0,5 V**.
 - Um die Temperatur zu berechnen, wird daher die gemessene Spannung um diesen Wert reduziert: 
   $$ V_{\text{out}} - 0,5 $$
-#### b. **Skalierungsfaktor von 100**:
+###### b. **Skalierungsfaktor von 100**:
 
 - Der TMP35 hat eine Empfindlichkeit von **10 mV/°C** (Millivolt pro Grad Celsius).
 - Das bedeutet, dass eine Änderung der Spannung um **1 V** einer Temperaturänderung von **100 °C** entspricht.
@@ -522,7 +522,7 @@ Diese Formel beschreibt die Umrechnung von der Ausgangsspannung (in Volt) zur Te
   - In der Formel wurde der Skalierungsfaktor ($m$) dann umgestellt werden auf $T = \frac{}{0,01}$
   
 ---
-### 3. **Formelbeispiel**
+##### 3. **Formelbeispiel**
 
 Angenommen, der TMP35 liefert eine Ausgangsspannung von **0.75 V**:
 
@@ -534,14 +534,14 @@ $$0,25×100=25°C$$
 Die gemessene Temperatur beträgt somit **25 °C**.
 
 ---
-### 4. **Zusätzliche Hinweise**
+##### 4. **Zusätzliche Hinweise**
 
 - Der TMP35 ist auf eine Versorgungsspannung von **3 bis 5,5 V** ausgelegt. Die Umrechnungsformel bleibt innerhalb dieses Bereichs gültig.
 - Temperaturbereich: Der TMP35 kann Temperaturen von **-10 °C bis +125 °C** messen. Dabei bleibt die Linearität der Ausgangsspannung erhalten.
 
 #### Funktionserklärung des ADS1115 Analog-Digital-Wandler
 
-### 1. **Grundprinzip des ADS1115**
+##### 1. **Grundprinzip des ADS1115**
 
 Der ADS1115 arbeitet wie folgt:
 
@@ -550,11 +550,11 @@ Der ADS1115 arbeitet wie folgt:
 3. Der digitale Wert wird über die I²C-Schnittstelle an den Host (Raspberry Pi) übertragen.
 
 ---
-### 2. **Spannungsreferenz (V_REF)**
+##### 2. **Spannungsreferenz (V_REF)**
 
 Der ADS1115 verwendet eine interne Referenzspannung (V_REF), die bei **2,048 V** liegt. Diese Referenz wird für die Umrechnung des gemessenen Signals in einen digitalen Wert genutzt.
 
-#### **Gain Amplifier (PGA)**
+###### **Gain Amplifier (PGA)**
 
 - Der ADS1115 hat einen programmierbaren Verstärker (PGA), der den Messbereich anpasst.
 - Die Verstärkung beeinflusst den **Full-Scale Range (FSR)**, also den maximalen Spannungsbereich, den der ADC messen kann.
@@ -568,7 +568,7 @@ Der ADS1115 verwendet eine interne Referenzspannung (V_REF), die bei **2,048 V**
 
 ---
 
-### 3. **Formel zur Spannungsberechnung**
+##### 3. **Formel zur Spannungsberechnung**
 
 Der digitale Wert, den der ADS1115 liefert, hängt von der gemessenen Spannung und dem FSR ab. Die Formel lautet:
 
@@ -584,7 +584,7 @@ $$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
 - Wenn der digitale Wert $16384$ beträgt:
   $$ Spannung (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
 
-#### Zusammenspiel mit dem TMP35 Sensor:
+##### 4. **Zusammenspiel mit dem TMP35 Sensor**:
 
 **FSR einstellen**:
 
