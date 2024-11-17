@@ -211,3 +211,268 @@ to create a copy on the local computer (in the current directory). Then edit the
 docker cp file.ext <container>:/path/to/file.ext
 ```
 to replace the old file.
+
+### TMP35 temperature measurement incl. ADS1115 analog-digital converter
+
+#### Summary of the connections
+
+| Component     | Function     | Connected to                            |
+| ------------- | ------------ | --------------------------------------- |
+| TMP35 (pin 1) | VCC          | 3.3V rail of the breadboard             |
+| TMP35 (pin 2) | Vout         | A0 (channel 0) of the ADS1115           |
+| TMP35 (pin 3) | GND          | GND rail of the breadboard              |
+| ADS1115 VDD   | power supply | 3.3V rail of the breadboard             |
+| ADS1115 GND   | Ground       | GND rail of the breadboard              |
+| ADS1115 SCL   | clock line   | GPIO 3 (SCL, pin 5) of the Raspberry Pi |
+| ADS1115 SDA   | data line    | GPIO 2 (SDA, pin 3) of the Raspberry Pi |
+| ADS1115 ADDR  | address      | GND (sets I²C address to 0x48)          |
+As soon as everything on the breadboard is connected to the GPIO of the PI, I²C must be activated.
+
+```bash
+sudo raspi-config
+```
+
+Then select “Interface Options” in the “raspi-config” menu + Enter
+
+![[Pasted image 20241116091759.png]]
+
+Select “I2C” in the “Interface Options” + Enter and activate I2C with “yes”
+
+![[Pasted image 20241116091947.png]]
+
+![[Pasted image 20241116092029.png]]
+
+Then restart the Pi once:
+
+```bash
+sudo shutdown -r now
+```
+
+You can now use the “i2cdetect tool” to check whether the I²C connection of the ADS1115 is correct:
+
+```bash
+sudo i2cdetect -y 1
+```
+
+In the output table you should see the address of the ADS1115, which is **0x48** by default (if the ADDR pin is connected to GND):
+
+The output should look something like this:
+
+```lua
+    0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: 48 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+Depending on how you have placed the 3.3V rail & the GND rail on the breadboard, the table may look slightly different:
+
+```lua
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- 48 -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+**It is only important that the value “48” is displayed!**
+
+Now update the system & install Python:
+
+```bash
+sudo apt update
+sudo apt install -y python3-pip
+```
+
+After Python has been installed, you can create a virtual environment for the Python script:
+
+```python
+python3 -m venv ~/ads1115_env # the name of the environment is an example
+```
+
+to activate the environment:
+
+```bash
+source ~/ads1115_env/bin/activate
+```
+
+to leave the environment:
+
+```bash
+deactivate
+```
+
+The required libraries for the environment are then installed:
+
+```python
+pip install adafruit-blinka
+pip install adafruit-circuitpython-ads1x15
+```
+
+Now you can create the Python script for temperature measurement:
+
+```bash
+nano test_ads1115.py # Of course you can also use another editor aswell :)
+```
+
+This is the Python code:
+
+```Python
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+
+# Establish I2C connection
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# Initialize ADS1115
+ads = ADS.ADS1115(i2c)
+chan = AnalogIn(ads, ADS.P0)  # A0 für TMP35
+
+def convert_to_temperature(voltage):
+    # TMP35 outputs 10 mV per °C, offset 0.5V for 0°C
+    temperature = (voltage - 0.5) * 100
+    return temperature
+
+try:
+    while True:
+        voltage = chan.voltage
+        temperature = convert_to_temperature(voltage)
+        print(f"voltage: {voltage:.2f} V, temperature: {temperature:.2f} °C")
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("Measurement ended")
+```
+
+Then save and execute with this command (**check that you are in the environment!**):
+
+```Python
+python test_ads1115.py
+```
+
+The output should then look like this:
+
+```Python
+(ads1115_env) pimqtt@pimqtt:~/scripts $ python test_ads1115.py
+voltage: 0.63 V, temperature: 12.52 °C
+voltage: 0.62 V, temperature: 12.50 °C
+voltage: 0.62 V, temperature: 12.46 °C
+voltage: 0.62 V, temperature: 12.44 °C
+voltage: 0.63 V, temperature: 12.58 °C
+voltage: 0.63 V, temperature: 12.90 °C
+voltage: 0.63 V, temperature: 12.55 °C
+voltage: 0.63 V, temperature: 12.58 °C
+voltage: 0.62 V, temperature: 12.45 °C
+voltage: 0.62 V, temperature: 12.45 °C
+voltage: 0.63 V, temperature: 13.06 °C
+voltage: 0.62 V, temperature: 12.44 °C
+voltage: 0.63 V, temperature: 12.56 °C
+voltage: 0.65 V, temperature: 14.64 °C
+voltage: 0.62 V, temperature: 12.49 °C
+voltage: 0.63 V, temperature: 12.64 °C
+voltage: 0.63 V, temperature: 13.34 °C
+```
+
+Now you can test whether the data is also sent to the database via MQTT, for this we have to adapt the script (in this case simply I wrote a new script):
+
+```Python
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+import subprocess
+
+# Establish I2C connection
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# Initialize ADS1115
+ads = ADS.ADS1115(i2c)
+chan = AnalogIn(ads, ADS.P0)  # A0 für TMP35
+
+# MQTT-configuration
+mqtt_broker = "x.x.x.x"  # IP address of the MQTT broker
+mqtt_port = "1883" # Port of the MQTT broker
+mqtt_topic = "Temp" # Topic of the message
+
+# Function for converting voltage to temperature
+def convert_to_temperature(voltage):
+    # TMP35 outputs 10 mV per °C, offset 0.5V for 0°C
+    temperature = (voltage - 0.5) * 100
+    return temperature
+
+# Function for sending a message with Mosquitto Client
+def publish_mqtt_message(topic, payload):
+    try:
+        subprocess.run(
+            ["mosquitto_pub", "-h", mqtt_broker, "-p", mqtt_port, "-t", mqtt_topic, "-m", payload],
+            check=True
+        )
+        print(f"MQTT Message sent: {payload}°C")
+    except subprocess.CalledProcessError as e:
+        print(f"Error sending the MQTT message: {e}")
+
+try:
+    count = 0  # Counter for the measurements
+    while True:
+        voltage = chan.voltage
+        temperature = convert_to_temperature(voltage)
+        print(f"voltage: {voltage:.2f} V, temperature: {temperature:.2f} °C")
+
+        # Send the temperature to the MQTT broker every 5 measurements
+        count += 1
+        if count % 5 == 0:
+            payload = f"{temperature:.2f}"
+            publish_mqtt_message(mqtt_topic, payload)
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Measurement ended")
+```
+
+Before you run the script now, check if your NodeRED connection from the broker to the database is adjusted, if either the MQTT topic does not match and or the measurement of your InfluxDB database does not match (*in my context I created a new measurement because I still had the simulated temp data in the old measurement*)
+
+If everything fits, you can run the script as a test:
+
+```Python
+(ads1115_env) pimqtt@pimqtt:~/scripts $ python test_ads1115_mosquitto.py
+voltage: 0.66 V, temperature: 16.11 °C
+voltage: 0.67 V, temperature: 16.80 °C
+voltage: 0.67 V, temperature: 16.79 °C
+voltage: 0.67 V, temperature: 16.65 °C
+voltage: 0.67 V, temperature: 16.86 °C
+MQTT Message sent: 16.86°C
+voltage: 0.66 V, temperature: 16.26 °C
+voltage: 0.66 V, temperature: 16.00 °C
+voltage: 0.66 V, temperature: 16.28 °C
+voltage: 0.66 V, temperature: 16.01 °C
+voltage: 0.66 V, temperature: 16.19 °C
+MQTT Message sent: 16.19°C
+voltage: 0.67 V, temperature: 16.80 °C
+voltage: 0.67 V, temperature: 16.79 °C
+voltage: 0.67 V, temperature: 16.76 °C
+voltage: 0.67 V, temperature: 16.81 °C
+voltage: 0.67 V, temperature: 16.83 °C
+MQTT Message sent: 16.83°C
+```
+
+As soon as the first data has been sent to the database, the new measurement should also be selectable in Grafana:
+
+![[Pasted image 20241117102822.png]]
+
+If you use a “Gauge” chart in Grafana, it is also important to select the correct fields (in my case “tempdata_real.mean”) in the “Value Options”:
+
+![[Pasted image 20241117103225.png]]
+
