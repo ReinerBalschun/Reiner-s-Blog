@@ -155,7 +155,7 @@ Client (null) sending DISCONNECT
 sent: 15
 ```
 
-und bei der Datenbank überprüfen:
+and check the database:
 
 ```bash
 docker exec -it influxdb influx
