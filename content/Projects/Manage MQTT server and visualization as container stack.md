@@ -492,7 +492,7 @@ $$
 - $b$ : Offset, i.e. the output voltage at 0°C (for TMP35: **0.5 V**).
 
 The formula for calculating the temperature then only needs to be rearranged:
-$$ T = \frac{V_{\text{out}} - b}{m} $$
+$$ T = \frac{V_{\text{out}} - b}{m} $$ <br>
 This formula describes the conversion from the output voltage (in volts) to the temperature (in degrees Celsius, °C).
 
 ---
@@ -503,22 +503,22 @@ This formula describes the conversion from the output voltage (in volts) to the 
 
 - According to the sensor documentation, the output voltage of the TMP35 at **0 °C** is exactly **0.5 V**.
 - To calculate the temperature, the measured voltage is therefore reduced by this value: 
-  $$ V_{\text{out}} - 0,5 $$
+$$ V_{\text{out}} - 0,5 $$
 ###### b. **Scaling factor of 100**:
 
 - The TMP35 has a sensitivity of **10 mV/°C** (millivolts per degree Celsius).
 - This means that a change in voltage of **1 V** corresponds to a temperature change of **100 °C**.
-- The differentiated voltage is therefore multiplied by the factor **100**: 
-  $$ (V_{\text{out}} - 0,5) \cdot 100 $$
+- The differentiated voltage is therefore multiplied by the factor **100**:
+$$ (V_{\text{out}} - 0,5) \cdot 100 $$
   
-  - In the formula, the scaling factor ($m$) was then changed to $T = \frac{}{0,01}$
+- In the formula, the scaling factor ($m$) was then changed to $T = \frac{}{0,01}$
   
 ---
 ##### 3. **Example formula**
 
 Assume that the TMP35 supplies an output voltage of **0.75 V**:
 
-1. Deduction of the offset: $$0,75−0,5=0,25$$
+1. Deduction of the offset: <br> $$0,75−0,5=0,25$$
 2. Multiplication by the scaling factor:  <br>
 $$0,25×100=25°C$$
 3. Formula summary: <br> $$ T = \frac{0,75 - 0,5}{0,01} = 25°C $$
@@ -563,9 +563,9 @@ The ADS1115 uses an internal reference voltage (V_REF), which is **2.048 V**. Th
 ##### 3. **Formula for voltage calculation**
 
 The digital value supplied by the ADS1115 depends on the measured voltage and the FSR. The formula is as follows:
-
-$$ voltage (V) = \frac{{digital~value}~×~FSR}{2^{15}} $$
-
+<br><br>
+- $$ voltage (V) = \frac{{digital~value}~×~FSR}{2^{15}} $$
+<br><br>
 - $2^{15}=32768$: The ADC works with 16 bits, but the measuring range is bipolar (±FSR), so the maximum resolution is $2^{15}$.
 - **Digital value**: The value reported by the ADC is between $-~32768$ (minimum) and $+~32767$ (maximum).
 - **FSR**: The full-scale range, depending on the PGA setting.
@@ -574,8 +574,9 @@ $$ voltage (V) = \frac{{digital~value}~×~FSR}{2^{15}} $$
 
 - Assumed PGA setting: ±2.048 V (standard, FSR = 4.096 V)
 - If the digital value is $16384$:
-  $$ voltage (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
-
+<br><br>
+- $$ voltage (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
+<br><br>
 ##### 4. **Interaction with the TMP35 sensor**:
 
 Set **FSR**:
@@ -585,8 +586,9 @@ Set **FSR**:
 **Measure voltage**:
 
 - Read the digital value from the ADS1115 and calculate the voltage:
- $$ voltage(V) = \frac{{digital~value}~×~ 4,096}{32768} $$
- **Convert voltage to temperature**:
+$$ voltage(V) = \frac{{digital~value}~×~ 4,096}{32768} $$
+
+**Convert voltage to temperature**:
 
 - Use the TMP35 formula:
 $$T = \frac{voltage(V) - 0,5}{0,01}$$

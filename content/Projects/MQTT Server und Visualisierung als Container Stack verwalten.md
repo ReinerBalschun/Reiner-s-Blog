@@ -500,7 +500,7 @@ $$
 - $b$ : Offset, d. h. die Ausgangsspannung bei 0°C (beim TMP35: **0,5 V**).
 
 Die Formel zur Berechnung der Temperatur muss dann nur noch umgestellt werden:
-$$ T = \frac{V_{\text{out}} - b}{m} $$
+$$ T = \frac{V_{\text{out}} - b}{m} $$ <br>
 Diese Formel beschreibt die Umrechnung von der Ausgangsspannung (in Volt) zur Temperatur (in Grad Celsius, °C).
 
 ---
@@ -511,22 +511,22 @@ Diese Formel beschreibt die Umrechnung von der Ausgangsspannung (in Volt) zur Te
 
 - Laut der Doku des Sensors beträgt die Ausgangsspannung des TMP35 bei **0 °C** genau **0,5 V**.
 - Um die Temperatur zu berechnen, wird daher die gemessene Spannung um diesen Wert reduziert: 
-  $$ V_{\text{out}} - 0,5 $$
+$$ V_{\text{out}} - 0,5 $$
 ###### b. **Skalierungsfaktor von 100**:
 
 - Der TMP35 hat eine Empfindlichkeit von **10 mV/°C** (Millivolt pro Grad Celsius).
 - Das bedeutet, dass eine Änderung der Spannung um **1 V** einer Temperaturänderung von **100 °C** entspricht.
 - Daher wird die differenzierte Spannung mit dem Faktor **100** multipliziert: 
-  $$ (V_{\text{out}} - 0,5) \cdot 100 $$
+$$ (V_{\text{out}} - 0,5) \cdot 100 $$
   
-  - In der Formel wurde der Skalierungsfaktor ($m$) dann umgestellt werden auf $T = \frac{}{0,01}$
+- In der Formel wurde der Skalierungsfaktor ($m$) dann umgestellt werden auf $T = \frac{}{0,01}$
   
 ---
 ##### 3. **Formelbeispiel**
 
 Angenommen, der TMP35 liefert eine Ausgangsspannung von **0.75 V**:
 
-1. Abzug des Offsets: $$0,75−0,5=0,25$$
+1. Abzug des Offsets: <br> $$0,75−0,5=0,25$$
 2. Multiplikation mit dem Skalierungsfaktor:  <br>
 $$0,25×100=25°C$$
 3. Formelzusammenfassung: <br> $$ T = \frac{0,75 - 0,5}{0,01} = 25°C $$
@@ -571,9 +571,9 @@ Der ADS1115 verwendet eine interne Referenzspannung (V_REF), die bei **2,048 V**
 ##### 3. **Formel zur Spannungsberechnung**
 
 Der digitale Wert, den der ADS1115 liefert, hängt von der gemessenen Spannung und dem FSR ab. Die Formel lautet:
-
-$$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
-
+<br><br>
+- $$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
+<br><br>
 - $2^{15}=32768$: Der ADC arbeitet mit 16 Bit, aber der Messbereich ist bipolar (±FSR), daher ist die maximale Auflösung $2^{15}$.
 - **Digitalwert**: Der vom ADC gemeldete Wert liegt zwischen $−~32768$ (Minimum) und $+~32767$ (Maximum).
 - **FSR**: Der Full-Scale Range, abhängig von der PGA-Einstellung.
@@ -582,8 +582,9 @@ $$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
 
 - Angenommene PGA-Einstellung: ±2.048 V (Standard, FSR = 4.096 V)
 - Wenn der digitale Wert $16384$ beträgt:
-  $$ Spannung (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
-
+<br><br>
+- $$ Spannung (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
+<br><br>
 ##### 4. **Zusammenspiel mit dem TMP35 Sensor**:
 
 **FSR einstellen**:
@@ -593,8 +594,9 @@ $$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
 **Spannung messen**:
 
 - Lies den digitalen Wert aus dem ADS1115 und berechne die Spannung mit:
- $$ Spannung (V) = \frac{{Digitalwert}~×~ 4,096}{32768} $$
- **Spannung in Temperatur umrechnen**:
+$$ Spannung (V) = \frac{{Digitalwert}~×~ 4,096}{32768} $$
+
+**Spannung in Temperatur umrechnen**:
 
 - Nutze die TMP35-Formel:
 $$T = \frac{Spannung(V) - 0,5}{0,01}$$
