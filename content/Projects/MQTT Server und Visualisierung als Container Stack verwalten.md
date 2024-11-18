@@ -600,3 +600,39 @@ $$ Spannung (V) = \frac{{Digitalwert}~×~ 4,096}{32768} $$
 
 - Nutze die TMP35-Formel:
 $$T = \frac{Spannung(V) - 0,5}{0,01}$$
+
+### Speichermessung für 1 Monat 
+
+#### 1. **Datenformat der gespeicherten Temperaturmessungen**
+
+Eine MQTT-Nachricht enthält typischerweise:
+
+- Ein _Topic_: z. B. `"Temp"` (ca. 4–10 Bytes, abhängig vom Namen).
+- Eine _Payload_: z. B. die Temperatur als String, z. B. `"23,45"` (ca. 5–10 Bytes, abhängig von der Genauigkeit).
+- Zusätzliches Overhead, wie Zeitstempel und Metadaten, wenn InfluxDB die Daten speichert (ca. 20–50 Bytes pro Eintrag).
+
+ungefähre Annahme: **50 Bytes pro Messung**.
+
+---
+
+#### 2. **Anzahl der Messungen**
+
+Ich sende alle 5 Sekunden eine Messung. Innerhalb eines Monats (30 Tage) sind das:
+
+- **Messungen pro Tag**: $$Messungen\ pro Tag = \frac{86400\ Sekunden}{5\ Sekunden} = 17280$$
+- **Messungen pro Monat**:
+$$Messung \ pro \ Monat = 17280\ pro\ Tag \ ×\ 30 \ Tage = 518400$$
+
+---
+
+#### 3. **Speicherbedarf**
+
+Pro Messung speicherst du 50 Bytes (Annahme). Die Gesamtgröße ergibt sich aus:
+
+$$Größe  der  Datenbank (Bytes)= Anzahl der Messungen\ ×\ Größe\ pro\ Messung $$
+
+Mit Werten:
+
+$$Größe der Datenbank (Bytes)=518400\ ×\ 50=25.92 MB$$
+
+*Hinweis: Dies ist eine grobe Schätzung und beinhaltet auch keine anderen Messdaten wie z.B. Luftfeuchtigkeit*

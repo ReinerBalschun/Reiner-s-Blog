@@ -592,3 +592,39 @@ $$ voltage(V) = \frac{{digital~value}~×~ 4,096}{32768} $$
 
 - Use the TMP35 formula:
 $$T = \frac{voltage(V) - 0,5}{0,01}$$
+
+### Memory measurement for 1 month 
+
+#### 1. **Data format of the stored temperature measurements**
+
+An MQTT message typically contains:
+
+- A *topic*: e.g. `“Temp”` (approx. 4-10 bytes, depending on the name).
+- A *payload*: e.g. the temperature as a string, e.g. `“23.45”` (approx. 5-10 bytes, depending on the accuracy).
+- Additional overhead, such as timestamps and metadata, when InfluxDB stores the data (approx. 20-50 bytes per entry).
+
+approximate assumption: **50 bytes per measurement**.
+
+---
+
+#### 2. **Number of measurements**
+
+I send a measurement every 5 seconds. That's 30 days within one month:
+
+- **Measurements per day**: $$Measurements\ per  day = \frac{86400\ sec}{5\ sec} = 17280$$
+- **Measurements per month**:
+$$Measurements \ per \ month = 17280\ per\ day \ ×\ 30 \ days = 518400$$
+
+---
+
+#### 3. **Storage requirements**
+
+You save 50 bytes per measurement (assumption). The total size results from:
+
+$$Size of the database (Bytes)= Number\ of\ measurements\ ×\ Size\ per\ Measurement $$
+
+with values:
+
+$$Size of the database (Bytes)=518400\ ×\ 50=25.92 MB$$
+
+*Note: This is a rough estimate and does not include other measurement data such as humidity*.
