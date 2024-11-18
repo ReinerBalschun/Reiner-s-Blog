@@ -482,7 +482,7 @@ sobald die ersten Daten zur Datenbank gesendet wurden, sollte in Grafana auch da
 
 Wenn man ein "Gauge" Chart in Grafana verwendet ist es auch wichtig in den "Value Options" das richtige Fields (in meinem Fall "tempdata_real.mean") auswählt:
 
-![[Pasted image 20241117103225.png]]
+![[Pasted image 20241117103225.png | 400 ]]
 
 
 ### Funktionserklärung Sensor TMP35 & Analog-Digital-Wandler ADS1115

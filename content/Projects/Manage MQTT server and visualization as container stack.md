@@ -474,7 +474,7 @@ As soon as the first data has been sent to the database, the new measurement sho
 
 If you use a “Gauge” chart in Grafana, it is also important to select the correct fields (in my case “tempdata_real.mean”) in the “Value Options”:
 
-![[Pasted image 20241117103225.png]]
+![[Pasted image 20241117103225.png | 400 ]]
 
 
 ### Functional explanation of the TMP35 sensor & ADS1115 analog-digital-converter
