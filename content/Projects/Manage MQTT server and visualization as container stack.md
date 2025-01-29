@@ -476,6 +476,162 @@ If you use a “Gauge” chart in Grafana, it is also important to select the co
 
 ![[Pasted image 20241117103225.png | 400 ]]
 
+### DHT11 Sensor Skript mit MQTT
+
+```Python
+import time
+import board
+import adafruit_dht
+from datetime import datetime
+from luma.core.interface.serial import i2c
+from luma.oled.device import sh1106
+from adafruit_ssd1306 import SSD1306_I2C
+from PIL import Image, ImageDraw, ImageFont
+import subprocess
+import RPi.GPIO as GPIO
+
+# DHT11-Sensor initialisieren
+dhtDevice = adafruit_dht.DHT11(board.D17)  # GPIO17 (Pin 11)
+
+# I2C-Setup für das SH1106-Display (groß)
+serial_large = i2c(port=1, address=0x3D)  # Adresse des großen Displays (0x3D)
+oled_large = sh1106(serial_large, width=128, height=64)
+
+# I2C-Setup für das SSD1306-Display (klein)
+i2c_small = board.I2C()
+oled_small = SSD1306_I2C(64, 48, i2c_small, addr=0x3C)  # Adresse des kleinen Displays (0x3C)
+
+# Bild für Pillow erstellen
+width_large, height_large = oled_large.width, oled_large.height
+image_large = Image.new("1", (width_large, height_large))  # 1-Bit-Bild (Schwarz/Weiß)
+draw_large = ImageDraw.Draw(image_large)
+
+width_small, height_small = oled_small.width, oled_small.height
+image_small = Image.new("1", (width_small, height_small))
+draw_small = ImageDraw.Draw(image_small)
+
+# Schriftart definieren
+font = ImageFont.load_default()
+
+# MQTT-Konfiguration
+mqtt_broker = "192.168.182.45"  # IP-Adresse des MQTT-Brokers
+mqtt_port = "1883"             # Standard-MQTT-Port
+mqtt_topic_temp = "DHT11/Temperatur"  # Topic für Temperatur
+mqtt_topic_humidity = "DHT11/Luftfeuchtigkeit"  # Topic für Luftfeuchtigkeit
+
+# Zähler für die Messungen
+count = 0
+
+# GPIO-Setup für das Relais
+RELAY_PIN = 18  # GPIO-Pin für das Relais
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)  # Relais standardmäßig auf HIGH (aus)
+
+# Funktion, um MQTT-Nachrichten mit mosquitto_pub zu senden
+def publish_mqtt_message(topic, payload):
+    try:
+        subprocess.run(
+            ["mosquitto_pub", "-h", mqtt_broker, "-p", mqtt_port, "-t", topic, "-m", payload],
+            check=True
+        )
+        print(f"MQTT Nachricht gesendet: Topic={topic}, Payload={payload}")
+    except subprocess.CalledProcessError as e:
+        print(f"Fehler beim Senden der MQTT-Nachricht: {e}")
+
+# Funktion zum Aktualisieren des großen Displays
+def update_large_display(temp, hum):
+    draw_large.rectangle((0, 0, width_large, height_large), outline=0, fill=0)
+    current_time = datetime.now().strftime("%H:%M:%S")
+    draw_large.text((0, 0), f"Zeit: {current_time}", font=font, fill=255)
+    draw_large.text((0, 20), f"Temp: {temp:.1f}°C", font=font, fill=255)
+    draw_large.text((0, 40), f"Luftfeucht: {hum:.1f}%", font=font, fill=255)
+    oled_large.display(image_large)
+
+# Funktion zum Aktualisieren des kleinen Displays
+import requests
+
+def get_influxdb_count():
+    INFLUXDB_HOST = "192.168.182.45"
+    INFLUXDB_PORT = "8086"
+    INFLUXDB_DATABASE = "tempdb"
+    INFLUXDB_MEASUREMENT = "DHT11_T"
+
+    INFLUX_QUERY = f"select count(*) from {INFLUXDB_MEASUREMENT}"
+    url = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}/query"
+    params = {"db": INFLUXDB_DATABASE, "q": INFLUX_QUERY}
+
+    try:
+        response = requests.post(url, data=params)
+        response_json = response.json()
+        count = response_json["results"][0]["series"][0]["values"][0][1]
+        return count
+    except Exception as e:
+        print(f"Fehler beim Abrufen der InfluxDB-Daten: {e}")
+        return "N/A"
+
+def update_small_display(temp):
+    count = get_influxdb_count()
+    draw_small.rectangle((0, 0, width_small, height_small), outline=0, fill=0)
+    draw_small.text((5, 15), "Anzahl:", font=font, fill=255)
+    draw_small.text((5, 25), str(count), font=font, fill=255)
+    oled_small.image(image_small)
+    oled_small.show()
+    time.sleep(0.5)
+
+# Funktion zum Steuern des Relais (Ventilator)
+def stop_fan_for_2_seconds():
+    print("Ventilator wird gestartet...")
+    GPIO.output(RELAY_PIN, GPIO.LOW)  # Relais aktivieren (Ventilator an)
+    time.sleep(2)
+    GPIO.output(RELAY_PIN, GPIO.HIGH)  # Relais deaktivieren (Ventilator aus)
+    print("Ventilator wird gestoppt.")
+
+# Funktion zum Senden der Temperatur an den Apache2-Webserver
+def send_temperature_to_webserver(temp):
+    url = f"http://192.168.182.45/temperatur/include/temp_api.php?temp={temp}"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            print(f"Temperatur erfolgreich an Webserver gesendet: {temp}°C")
+        else:
+            print(f"Fehler beim Senden der Temperatur. Statuscode: {response.status_code}")
+    except Exception as e:
+        print(f"Fehler bei der Verbindung zum Webserver: {e}")
+
+try:
+    while True:
+        try:
+            temperature = dhtDevice.temperature
+            humidity = dhtDevice.humidity
+
+            if humidity is not None and temperature is not None:
+                print(f"Temperatur: {temperature:.1f} °C, Luftfeuchtigkeit: {humidity:.1f} %")
+                count += 1
+
+                if count % 5 == 0:
+                    publish_mqtt_message(mqtt_topic_temp, f"{temperature:.1f}")
+                    publish_mqtt_message(mqtt_topic_humidity, f"{humidity:.1f}")
+                    stop_fan_for_2_seconds()
+                    update_large_display(temperature, humidity)
+                    update_small_display(temperature)
+                    send_temperature_to_webserver(temperature)
+            else:
+                print("Fehler beim Lesen des DHT11-Sensors!")
+
+        except RuntimeError as error:
+            print(f"Lesefehler: {error}")
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Messung beendet.")
+    GPIO.cleanup()
+    oled_large.clear()
+    oled_large.show()
+    oled_small.fill(0)
+    oled_small.show()	
+```
+
 
 ### Functional explanation of the TMP35 sensor & ADS1115 analog-digital-converter
 #### Conversion formula from voltage to temperature **TMP35**
