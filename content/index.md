@@ -22,4 +22,7 @@ Hi hier ist Reiner hoffe dir geht es gut 👾.
 > Lösung zu allen Bugs gefunden siehe [[Bugs]]
 
 > [!changelog]- Update 12.10.2024
-> Hab die letzte Wochen an einem neuen Projekt gearbeitet Doku findet ihr [hier](Projects/MQTT%20Server%20und%20Visualisierung%20als%20Container%20Stack%20verwalten.md) 
+> Hab die letzte Wochen an einem neuen Projekt gearbeitet Doku findet ihr [hier](Projects/MQTT%20Server%20und%20Visualisierung%20als%20Container%20Stack%20verwalten.md)
+
+> [!changelog]- Update 15.10.2024
+> Großes quartz 4.4.0 Update! Hab nun endlich es geschaft Kommentare zu implementieren mehr infos [hier](https://giscus.app/de). Außerdem habe ich Backlinks deaktiviert, da ich keine wirklich benutze.  

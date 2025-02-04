@@ -224,3 +224,571 @@ docker cp file.ext <container>:/path/to/file.ext
 ```
 
 um die alte Datei zu ersetzen.
+
+### TMP35 Temperaturmessung inkl. ADS1115 Analog-Digital-Wandler
+
+#### Zusammenfassung der Anschlüsse
+
+| Bauteil       | Funktion        | Verbunden mit                        |
+| ------------- | --------------- | ------------------------------------ |
+| TMP35 (Pin 1) | VCC             | 3.3V-Schiene des Breadboards         |
+| TMP35 (Pin 2) | Vout            | A0 (Kanal 0) des ADS1115             |
+| TMP35 (Pin 3) | GND             | GND-Schiene des Breadboards          |
+| ADS1115 VDD   | Stromversorgung | 3.3V-Schiene des Breadboards         |
+| ADS1115 GND   | Masse           | GND-Schiene des Breadboards          |
+| ADS1115 SCL   | Taktleitung     | GPIO 3 (SCL, Pin 5) des Raspberry Pi |
+| ADS1115 SDA   | Datenleitung    | GPIO 2 (SDA, Pin 3) des Raspberry Pi |
+| ADS1115 ADDR  | Adresse         | GND (setzt I²C-Adresse auf 0x48)     |
+Sobald alles beim Breadboard mit der GPIO des PIs verbunden ist, muss I²C aktiviert werden.
+
+```bash
+sudo raspi-config
+```
+
+Dann in dem "raspi-config" Menu "Interface Options" auswählen + Enter
+
+![[Pasted image 20241116091759.png]]
+
+In den "Interface Options" "I2C" auswählen + Enter und I2C mit "yes" aktivieren
+
+![[Pasted image 20241116091947.png]]
+
+![[Pasted image 20241116092029.png]]
+
+Danach den Pi einmal Neustarten:
+
+```bash
+sudo shutdown -r now
+```
+
+Nun kann man mit dem "i2cdetect-Tool" überprüfen, ob die I²C-Verbindung des ADS1115 richtig ist:
+
+```bash
+sudo i2cdetect -y 1
+```
+
+In der ausgegebenen Tabelle solltest du die Adresse des ADS1115 sehen, die standardmäßig **0x48** ist (falls der ADDR-Pin mit GND verbunden wurde):
+
+Die Ausgabe sollte ungefähr so aussehen:
+```lua
+    0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: 48 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+Je nachdem wie du die 3.3V-Schiene & die GND-Schiene auf dem Breadboard gelegt hast kann die Tabelle ein wenig abweichend aussehen:
+
+```lua
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- 48 -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+**Wichtig ist nur das der Wert "48" angezeigt wird!**
+
+Nun wird das System geupdatet & Python installiert:
+
+```bash
+sudo apt update
+sudo apt install -y python3-pip
+```
+
+Nachdem Python installiert wurde, kann man eine virtuelle Umgebung für das Python Skript erstellt werden:
+
+```python
+python3 -m venv ~/ads1115_env # der Name der Umgebung ist ein Beispiel
+```
+zum aktivieren der Umgebung:
+
+```bash
+source ~/ads1115_env/bin/activate
+```
+um die Umgebung zu verlassen:
+
+```bash
+deactivate
+```
+Dann werden die benötigten Bibliotheken für die Umgebung installiert:
+
+```python
+pip install adafruit-blinka
+pip install adafruit-circuitpython-ads1x15
+```
+
+Nun wird das Python-Skript zur Temperaturmessung erstellt:
+
+```bash
+nano test_ads1115.py *Man kann natürlich auch einen anderen Editor benutzen :)*
+```
+
+Das ist der Python Code:
+
+```Python
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+
+# I2C-Verbindung herstellen
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# ADS1115 initialisieren
+ads = ADS.ADS1115(i2c)
+chan = AnalogIn(ads, ADS.P0)  # A0 für TMP35
+
+def convert_to_temperature(voltage):
+    # TMP35 gibt 10 mV pro °C aus, Offset 0.5V für 0°C
+    temperature = (voltage - 0.5) * 100
+    return temperature
+
+try:
+    while True:
+        voltage = chan.voltage
+        temperature = convert_to_temperature(voltage)
+        print(f"Spannung: {voltage:.2f} V, Temperatur: {temperature:.2f} °C")
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("Messung beendet")
+```
+Dann speichern und mit diesem Befehl ausführen (**überprüfe das du in der Umgebung bist!**):
+
+```Python
+python test_ads1115.py
+```
+
+So sollte die Ausgabe dann aussehen:
+
+```Python
+(ads1115_env) pimqtt@pimqtt:~/scripts $ python test_ads1115.py
+Spannung: 0.63 V, Temperatur: 12.52 °C
+Spannung: 0.62 V, Temperatur: 12.50 °C
+Spannung: 0.62 V, Temperatur: 12.46 °C
+Spannung: 0.62 V, Temperatur: 12.44 °C
+Spannung: 0.63 V, Temperatur: 12.58 °C
+Spannung: 0.63 V, Temperatur: 12.90 °C
+Spannung: 0.63 V, Temperatur: 12.55 °C
+Spannung: 0.63 V, Temperatur: 12.58 °C
+Spannung: 0.62 V, Temperatur: 12.45 °C
+Spannung: 0.62 V, Temperatur: 12.45 °C
+Spannung: 0.63 V, Temperatur: 13.06 °C
+Spannung: 0.62 V, Temperatur: 12.44 °C
+Spannung: 0.63 V, Temperatur: 12.56 °C
+Spannung: 0.65 V, Temperatur: 14.64 °C
+Spannung: 0.62 V, Temperatur: 12.49 °C
+Spannung: 0.63 V, Temperatur: 12.64 °C
+Spannung: 0.63 V, Temperatur: 13.34 °C
+```
+
+Nun kann man testen, ob die Daten zur Datenbank via MQTT auch gesendet werden, dafür müssen wir das Skript ein wenig anpassen (in diesem Fall schreibe einfach ein neues Skript):
+
+```Python
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+import subprocess
+
+# I2C-Verbindung herstellen
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# ADS1115 initialisieren
+ads = ADS.ADS1115(i2c)
+chan = AnalogIn(ads, ADS.P0)  # A0 für TMP35
+
+# MQTT-Konfiguration
+mqtt_broker = "x.x.x.x"  # IP-Adresse des MQTT-Brokers
+mqtt_port = "1883" # Port des MQTT-Brokers
+mqtt_topic = "Temp" # Thema der Nachricht
+
+# Funktion zur Umrechnung der Spannung in Temperatur
+def convert_to_temperature(voltage):
+    # TMP35 gibt 10 mV pro °C aus, Offset 0.5V für 0°C
+    temperature = (voltage - 0.5) * 100
+    return temperature
+
+# Funktion zum Senden einer Nachricht mit Mosquitto Client
+def publish_mqtt_message(topic, payload):
+    try:
+        subprocess.run(
+            ["mosquitto_pub", "-h", mqtt_broker, "-p", mqtt_port, "-t", mqtt_topic, "-m", payload],
+            check=True
+        )
+        print(f"MQTT Nachricht gesendet: {payload}°C")
+    except subprocess.CalledProcessError as e:
+        print(f"Fehler beim Senden der MQTT-Nachricht: {e}")
+
+try:
+    count = 0  # Zähler für die Messungen
+    while True:
+        voltage = chan.voltage
+        temperature = convert_to_temperature(voltage)
+        print(f"Spannung: {voltage:.2f} V, Temperatur: {temperature:.2f} °C")
+
+        # Alle 5 Messungen die Temperatur an den MQTT-Broker senden
+        count += 1
+        if count % 5 == 0:
+            payload = f"{temperature:.2f}"
+            publish_mqtt_message(mqtt_topic, payload)
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Messung beendet")
+```
+
+Bevor du das Skript nun ausführst, überprüfe ob deine NodeRED-Verbindung vom Broker zur Datenbank angepasst werden, sollte entweder das MQTT-Topic nicht übereinstimmen und oder das Measurement deiner InfluxDB Datenbank nicht passen (*im meinem Kontext habe ich eine neues Measurement erstellt, da ich noch die simulierten Tempdaten im alten Measurement hatte*)
+
+Sollte dann alles passen kannst du testweise das Skript ausführen:
+
+```Python
+(ads1115_env) pimqtt@pimqtt:~/scripts $ python test_ads1115_mosquitto.py
+Spannung: 0.66 V, Temperatur: 16.11 °C
+Spannung: 0.67 V, Temperatur: 16.80 °C
+Spannung: 0.67 V, Temperatur: 16.79 °C
+Spannung: 0.67 V, Temperatur: 16.65 °C
+Spannung: 0.67 V, Temperatur: 16.86 °C
+MQTT Nachricht gesendet: 16.86°C
+Spannung: 0.66 V, Temperatur: 16.26 °C
+Spannung: 0.66 V, Temperatur: 16.00 °C
+Spannung: 0.66 V, Temperatur: 16.28 °C
+Spannung: 0.66 V, Temperatur: 16.01 °C
+Spannung: 0.66 V, Temperatur: 16.19 °C
+MQTT Nachricht gesendet: 16.19°C
+Spannung: 0.67 V, Temperatur: 16.80 °C
+Spannung: 0.67 V, Temperatur: 16.79 °C
+Spannung: 0.67 V, Temperatur: 16.76 °C
+Spannung: 0.67 V, Temperatur: 16.81 °C
+Spannung: 0.67 V, Temperatur: 16.83 °C
+MQTT Nachricht gesendet: 16.83°C
+```
+
+
+sobald die ersten Daten zur Datenbank gesendet wurden, sollte in Grafana auch das neue Measurement auswählbar sein:
+
+![[Pasted image 20241117102822.png]]
+
+Wenn man ein "Gauge" Chart in Grafana verwendet ist es auch wichtig in den "Value Options" das richtige Fields (in meinem Fall "tempdata_real.mean") auswählt:
+
+![[Pasted image 20241117103225.png | 400 ]]
+
+### DHT11 Sensor Skript mit MQTT
+
+```Python
+import time
+import board
+import adafruit_dht
+from datetime import datetime
+from luma.core.interface.serial import i2c
+from luma.oled.device import sh1106
+from adafruit_ssd1306 import SSD1306_I2C
+from PIL import Image, ImageDraw, ImageFont
+import subprocess
+import RPi.GPIO as GPIO
+
+# DHT11-Sensor initialisieren
+dhtDevice = adafruit_dht.DHT11(board.D17)  # GPIO17 (Pin 11)
+
+# I2C-Setup für das SH1106-Display (groß)
+serial_large = i2c(port=1, address=0x3D)  # Adresse des großen Displays (0x3D)
+oled_large = sh1106(serial_large, width=128, height=64)
+
+# I2C-Setup für das SSD1306-Display (klein)
+i2c_small = board.I2C()
+oled_small = SSD1306_I2C(64, 48, i2c_small, addr=0x3C)  # Adresse des kleinen Displays (0x3C)
+
+# Bild für Pillow erstellen
+width_large, height_large = oled_large.width, oled_large.height
+image_large = Image.new("1", (width_large, height_large))  # 1-Bit-Bild (Schwarz/Weiß)
+draw_large = ImageDraw.Draw(image_large)
+
+width_small, height_small = oled_small.width, oled_small.height
+image_small = Image.new("1", (width_small, height_small))
+draw_small = ImageDraw.Draw(image_small)
+
+# Schriftart definieren
+font = ImageFont.load_default()
+
+# MQTT-Konfiguration
+mqtt_broker = "192.168.182.45"  # IP-Adresse des MQTT-Brokers
+mqtt_port = "1883"             # Standard-MQTT-Port
+mqtt_topic_temp = "DHT11/Temperatur"  # Topic für Temperatur
+mqtt_topic_humidity = "DHT11/Luftfeuchtigkeit"  # Topic für Luftfeuchtigkeit
+
+# Zähler für die Messungen
+count = 0
+
+# GPIO-Setup für das Relais
+RELAY_PIN = 18  # GPIO-Pin für das Relais
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)  # Relais standardmäßig auf HIGH (aus)
+
+# Funktion, um MQTT-Nachrichten mit mosquitto_pub zu senden
+def publish_mqtt_message(topic, payload):
+    try:
+        subprocess.run(
+            ["mosquitto_pub", "-h", mqtt_broker, "-p", mqtt_port, "-t", topic, "-m", payload],
+            check=True
+        )
+        print(f"MQTT Nachricht gesendet: Topic={topic}, Payload={payload}")
+    except subprocess.CalledProcessError as e:
+        print(f"Fehler beim Senden der MQTT-Nachricht: {e}")
+
+# Funktion zum Aktualisieren des großen Displays
+def update_large_display(temp, hum):
+    draw_large.rectangle((0, 0, width_large, height_large), outline=0, fill=0)
+    current_time = datetime.now().strftime("%H:%M:%S")
+    draw_large.text((0, 0), f"Zeit: {current_time}", font=font, fill=255)
+    draw_large.text((0, 20), f"Temp: {temp:.1f}°C", font=font, fill=255)
+    draw_large.text((0, 40), f"Luftfeucht: {hum:.1f}%", font=font, fill=255)
+    oled_large.display(image_large)
+
+# Funktion zum Aktualisieren des kleinen Displays
+import requests
+
+def get_influxdb_count():
+    INFLUXDB_HOST = "192.168.182.45"
+    INFLUXDB_PORT = "8086"
+    INFLUXDB_DATABASE = "tempdb"
+    INFLUXDB_MEASUREMENT = "DHT11_T"
+
+    INFLUX_QUERY = f"select count(*) from {INFLUXDB_MEASUREMENT}"
+    url = f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}/query"
+    params = {"db": INFLUXDB_DATABASE, "q": INFLUX_QUERY}
+
+    try:
+        response = requests.post(url, data=params)
+        response_json = response.json()
+        count = response_json["results"][0]["series"][0]["values"][0][1]
+        return count
+    except Exception as e:
+        print(f"Fehler beim Abrufen der InfluxDB-Daten: {e}")
+        return "N/A"
+
+def update_small_display(temp):
+    count = get_influxdb_count()
+    draw_small.rectangle((0, 0, width_small, height_small), outline=0, fill=0)
+    draw_small.text((5, 15), "Anzahl:", font=font, fill=255)
+    draw_small.text((5, 25), str(count), font=font, fill=255)
+    oled_small.image(image_small)
+    oled_small.show()
+    time.sleep(0.5)
+
+# Funktion zum Steuern des Relais (Ventilator)
+def stop_fan_for_2_seconds():
+    print("Ventilator wird gestartet...")
+    GPIO.output(RELAY_PIN, GPIO.LOW)  # Relais aktivieren (Ventilator an)
+    time.sleep(2)
+    GPIO.output(RELAY_PIN, GPIO.HIGH)  # Relais deaktivieren (Ventilator aus)
+    print("Ventilator wird gestoppt.")
+
+# Funktion zum Senden der Temperatur an den Apache2-Webserver
+def send_temperature_to_webserver(temp):
+    url = f"http://192.168.182.45/temperatur/include/temp_api.php?temp={temp}"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            print(f"Temperatur erfolgreich an Webserver gesendet: {temp}°C")
+        else:
+            print(f"Fehler beim Senden der Temperatur. Statuscode: {response.status_code}")
+    except Exception as e:
+        print(f"Fehler bei der Verbindung zum Webserver: {e}")
+
+try:
+    while True:
+        try:
+            temperature = dhtDevice.temperature
+            humidity = dhtDevice.humidity
+
+            if humidity is not None and temperature is not None:
+                print(f"Temperatur: {temperature:.1f} °C, Luftfeuchtigkeit: {humidity:.1f} %")
+                count += 1
+
+                if count % 5 == 0:
+                    publish_mqtt_message(mqtt_topic_temp, f"{temperature:.1f}")
+                    publish_mqtt_message(mqtt_topic_humidity, f"{humidity:.1f}")
+                    stop_fan_for_2_seconds()
+                    update_large_display(temperature, humidity)
+                    update_small_display(temperature)
+                    send_temperature_to_webserver(temperature)
+            else:
+                print("Fehler beim Lesen des DHT11-Sensors!")
+
+        except RuntimeError as error:
+            print(f"Lesefehler: {error}")
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Messung beendet.")
+    GPIO.cleanup()
+    oled_large.clear()
+    oled_large.show()
+    oled_small.fill(0)
+    oled_small.show()	
+```
+
+
+### Funktionserklärung Sensor TMP35 & Analog-Digital-Wandler ADS1115
+#### Umrechnungsformel von Spannung zu Temperatur **TMP35**
+
+##### 1. **Grundlage der Formel**
+
+Die **TMP35-Ausgangsspannung** ist linear zur gemessenen Temperatur:
+$$
+V_{\text{out}} = m \cdot T + b
+$$
+- $Vout$ ​: Ausgangsspannung (Volt)
+- $T$ : Temperatur (°C)
+- $m$ : Steigung, d. h. wie stark die Spannung pro Temperaturgrad zunimmt (beim TMP35: **10 mV/°C**).
+- $b$ : Offset, d. h. die Ausgangsspannung bei 0°C (beim TMP35: **0,5 V**).
+
+Die Formel zur Berechnung der Temperatur muss dann nur noch umgestellt werden:
+$$ T = \frac{V_{\text{out}} - b}{m} $$ <br>
+Diese Formel beschreibt die Umrechnung von der Ausgangsspannung (in Volt) zur Temperatur (in Grad Celsius, °C).
+
+---
+
+##### 2. **Aufschlüsselung der Formel**
+
+###### a. **Offset von 0,5 V**:
+
+- Laut der Doku des Sensors beträgt die Ausgangsspannung des TMP35 bei **0 °C** genau **0,5 V**.
+- Um die Temperatur zu berechnen, wird daher die gemessene Spannung um diesen Wert reduziert: 
+$$ V_{\text{out}} - 0,5 $$
+###### b. **Skalierungsfaktor von 100**:
+
+- Der TMP35 hat eine Empfindlichkeit von **10 mV/°C** (Millivolt pro Grad Celsius).
+- Das bedeutet, dass eine Änderung der Spannung um **1 V** einer Temperaturänderung von **100 °C** entspricht.
+- Daher wird die differenzierte Spannung mit dem Faktor **100** multipliziert: 
+$$ (V_{\text{out}} - 0,5) \cdot 100 $$
+  
+- In der Formel wurde der Skalierungsfaktor ($m$) dann umgestellt werden auf $T = \frac{}{0,01}$
+  
+---
+##### 3. **Formelbeispiel**
+
+Angenommen, der TMP35 liefert eine Ausgangsspannung von **0.75 V**:
+
+1. Abzug des Offsets: <br> $$0,75−0,5=0,25$$
+2. Multiplikation mit dem Skalierungsfaktor:  <br>
+$$0,25×100=25°C$$
+3. Formelzusammenfassung: <br> $$ T = \frac{0,75 - 0,5}{0,01} = 25°C $$
+
+Die gemessene Temperatur beträgt somit **25 °C**.
+
+---
+##### 4. **Zusätzliche Hinweise**
+
+- Der TMP35 ist auf eine Versorgungsspannung von **3 bis 5,5 V** ausgelegt. Die Umrechnungsformel bleibt innerhalb dieses Bereichs gültig.
+- Temperaturbereich: Der TMP35 kann Temperaturen von **-10 °C bis +125 °C** messen. Dabei bleibt die Linearität der Ausgangsspannung erhalten.
+
+#### Funktionserklärung des ADS1115 Analog-Digital-Wandler
+
+##### 1. **Grundprinzip des ADS1115**
+
+Der ADS1115 arbeitet wie folgt:
+
+1. Der ADC (Analog-Digital-Converter) misst die **analoge Eingangsspannung** an einem oder mehreren Eingängen. (in meinem Fall im Eingang **A0**)
+2. Diese Spannung wird in einen **digitalen Wert** (ein 16-Bit-Zahl) umgewandelt.
+3. Der digitale Wert wird über die I²C-Schnittstelle an den Host (Raspberry Pi) übertragen.
+
+---
+##### 2. **Spannungsreferenz (V_REF)**
+
+Der ADS1115 verwendet eine interne Referenzspannung (V_REF), die bei **2,048 V** liegt. Diese Referenz wird für die Umrechnung des gemessenen Signals in einen digitalen Wert genutzt.
+
+###### **Gain Amplifier (PGA)**
+
+- Der ADS1115 hat einen programmierbaren Verstärker (PGA), der den Messbereich anpasst.
+- Die Verstärkung beeinflusst den **Full-Scale Range (FSR)**, also den maximalen Spannungsbereich, den der ADC messen kann.
+- Beispiele für FSR bei verschiedenen PGA-Einstellungen:
+-  ±6,144 V (PGA = 2/3)
+-  ±4,096 V (PGA = 1)
+-  ±2,048 V (PGA = 2) → Standard
+-  ±1,024 V (PGA = 4)
+-  ±0,512 V (PGA = 8)
+-  ±0,256 V (PGA = 16)
+
+---
+
+##### 3. **Formel zur Spannungsberechnung**
+
+Der digitale Wert, den der ADS1115 liefert, hängt von der gemessenen Spannung und dem FSR ab. Die Formel lautet:
+<br><br>
+- $$ Spannung (V) = \frac{{Digitalwert}~×~FSR}{2^{15}} $$
+<br><br>
+- $2^{15}=32768$: Der ADC arbeitet mit 16 Bit, aber der Messbereich ist bipolar (±FSR), daher ist die maximale Auflösung $2^{15}$.
+- **Digitalwert**: Der vom ADC gemeldete Wert liegt zwischen $−~32768$ (Minimum) und $+~32767$ (Maximum).
+- **FSR**: Der Full-Scale Range, abhängig von der PGA-Einstellung.
+
+**Beispiel**:
+
+- Angenommene PGA-Einstellung: ±2.048 V (Standard, FSR = 4.096 V)
+- Wenn der digitale Wert $16384$ beträgt:
+<br><br>
+- $$ Spannung (V) = \frac{{16384}~ × ~ 4,096}{32768} = 2,048~V $$
+<br><br>
+##### 4. **Zusammenspiel mit dem TMP35 Sensor**:
+
+**FSR einstellen**:
+
+- Verwende ±2.048 V (Standard), da der TMP35 zwischen 0.5 V und 1.75 V arbeitet.
+
+**Spannung messen**:
+
+- Lies den digitalen Wert aus dem ADS1115 und berechne die Spannung mit:
+$$ Spannung (V) = \frac{{Digitalwert}~×~ 4,096}{32768} $$
+
+**Spannung in Temperatur umrechnen**:
+
+- Nutze die TMP35-Formel:
+$$T = \frac{Spannung(V) - 0,5}{0,01}$$
+
+### Speichermessung für 1 Monat 
+
+#### 1. **Datenformat der gespeicherten Temperaturmessungen**
+
+Eine MQTT-Nachricht enthält typischerweise:
+
+- Ein _Topic_: z. B. `"Temp"` (ca. 4–10 Bytes, abhängig vom Namen).
+- Eine _Payload_: z. B. die Temperatur als String, z. B. `"23,45"` (ca. 5–10 Bytes, abhängig von der Genauigkeit).
+- Zusätzliches Overhead, wie Zeitstempel und Metadaten, wenn InfluxDB die Daten speichert (ca. 20–50 Bytes pro Eintrag).
+
+ungefähre Annahme: **50 Bytes pro Messung**.
+
+---
+
+#### 2. **Anzahl der Messungen**
+
+Ich sende alle 5 Sekunden eine Messung. Innerhalb eines Monats (30 Tage) sind das:
+
+- **Messungen pro Tag**: $$Messungen\ pro Tag = \frac{86400\ Sekunden}{5\ Sekunden} = 17280$$
+- **Messungen pro Monat**:
+$$Messung \ pro \ Monat = 17280\ pro\ Tag \ ×\ 30 \ Tage = 518400$$
+
+---
+
+#### 3. **Speicherbedarf**
+
+Pro Messung speicherst du 50 Bytes (Annahme). Die Gesamtgröße ergibt sich aus:
+
+$$Größe  der  Datenbank (Bytes)= Anzahl der Messungen\ ×\ Größe\ pro\ Messung $$
+
+Mit Werten:
+
+$$Größe der Datenbank (Bytes)=518400\ ×\ 50=25.92 MB$$
+
+*Hinweis: Dies ist eine grobe Schätzung und beinhaltet auch keine anderen Messdaten wie z.B. Luftfeuchtigkeit*

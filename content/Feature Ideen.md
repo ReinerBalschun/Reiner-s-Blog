@@ -1,5 +1,6 @@
 ---
 title: 'Feature Ideen'
+tags: [Ideen, Feature]
 ---
 
 > [!todo] Recent Files Feature
@@ -29,5 +30,5 @@ title: 'Feature Ideen'
 > [!todo]- Liste mit allen Notes
 > **WORK IN PROGRESS!**
 
-> [!todo]- Kommentare 
-> läuft über  [giscus](https://giscus.app/de)
+> [!done]- Kommentare (hinzugefügt 15.10.24)
+> läuft über  [giscus](https://giscus.app/de)
