@@ -568,6 +568,12 @@ import subprocess
 import RPi.GPIO as GPIO
 import requests
 
+# Zentrale IP-Konfiguration
+SERVER_IP = "IP-Adresse"
+
+# Globale Variable für den Ventilator-Status
+ventilator_manual_mode = False
+
 # DHT11-Sensor initialisieren
 dhtDevice = adafruit_dht.DHT11(board.D17)
 
@@ -592,7 +598,7 @@ draw_small = ImageDraw.Draw(image_small)
 font = ImageFont.load_default()
 
 # MQTT-Konfiguration
-mqtt_broker = "192.168.182.45"
+mqtt_broker = SERVER_IP
 mqtt_port = "1883"
 mqtt_topic_temp = "DHT11/Temperatur"
 mqtt_topic_humidity = "DHT11/Luftfeuchtigkeit"
@@ -601,6 +607,31 @@ mqtt_topic_humidity = "DHT11/Luftfeuchtigkeit"
 RELAY_PIN = 18
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)  # Relais auf HIGH (aus)
+
+# Funktion zum Überprüfen von MQTT-Nachrichten für den Ventilator
+def subscribe_and_check_ventilator():
+    global ventilator_manual_mode
+    try:
+        result = subprocess.run(
+            ["mosquitto_sub", "-h", mqtt_broker, "-p", mqtt_port, "-t", "Ventilator", "-C", "1"],
+            capture_output=True,
+            text=True,
+            timeout=1
+        )
+        if result.stdout:
+            message = result.stdout.strip()
+            if message == "Ventilator AN":
+                ventilator_manual_mode = True
+                GPIO.output(RELAY_PIN, GPIO.LOW)
+                print("Ventilator wurde manuell eingeschaltet")
+            elif message == "Ventilator AUS":
+                ventilator_manual_mode = False
+                GPIO.output(RELAY_PIN, GPIO.HIGH)
+                print("Ventilator wurde manuell ausgeschaltet")
+    except subprocess.TimeoutExpired:
+        pass
+    except Exception as e:
+        print(f"Fehler beim MQTT Subscribe: {e}")
 
 # Funktion, um MQTT-Nachrichten zu senden
 def publish_mqtt_message(topic, payload):
@@ -624,7 +655,7 @@ def update_large_display(temp, hum):
 
 # Funktion zum Abrufen der Anzahl der Messwerte aus InfluxDB
 def get_influxdb_count():
-    INFLUXDB_HOST = "IP-Adresse"
+    INFLUXDB_HOST = SERVER_IP
     INFLUXDB_PORT = "8086"
     INFLUXDB_DATABASE = "tempdb"
     INFLUXDB_MEASUREMENT = "DHT11_T"
@@ -652,17 +683,19 @@ def update_small_display():
     oled_small.show()
     time.sleep(0.5)
 
-# Funktion zum Steuern des Ventilators
-def stop_fan_for_2_seconds():
-    print("Ventilator wird gestartet...")
-    GPIO.output(RELAY_PIN, GPIO.LOW)
-    time.sleep(2)
-    GPIO.output(RELAY_PIN, GPIO.HIGH)
-    print("Ventilator wird gestoppt.")
+# Temperaturprüfung und Ventilatorsteuerung
+def check_temperature_and_control_fan(temperature):
+    if not ventilator_manual_mode:  # Nur prüfen wenn nicht manuell gesteuert
+        if temperature > 25.0:
+            GPIO.output(RELAY_PIN, GPIO.LOW)
+            print(f"Temperatur {temperature}°C über 25°C - Ventilator eingeschaltet")
+        else:
+            GPIO.output(RELAY_PIN, GPIO.HIGH)
+            print(f"Temperatur {temperature}°C unter 25°C - Ventilator ausgeschaltet")
 
 # Funktion zum Senden der Temperatur an den Webserver
 def send_temperature_to_webserver(temp):
-    url = f"http://"IP-Adresse"/temperatur/include/temp_api.php?temp={temp}"
+    url = f"http://{SERVER_IP}/temperatur/include/temp_api.php?temp={temp}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -687,16 +720,18 @@ try:
                 if count % 5 == 0:
                     publish_mqtt_message(mqtt_topic_temp, f"{temperature:.1f}")
                     publish_mqtt_message(mqtt_topic_humidity, f"{humidity:.1f}")
-                    stop_fan_for_2_seconds()
+                    check_temperature_and_control_fan(temperature)
                     update_large_display(temperature, humidity)
                     update_small_display()
                     send_temperature_to_webserver(temperature)
+
             else:
                 print("Fehler beim Lesen des DHT11-Sensors!")
 
         except RuntimeError as error:
             print(f"Lesefehler: {error}")
 
+        subscribe_and_check_ventilator()
         time.sleep(1)
 
 except KeyboardInterrupt:
@@ -706,7 +741,6 @@ except KeyboardInterrupt:
     oled_large.show()
     oled_small.fill(0)
     oled_small.show()
-
 ```
 
 #### Erklärung des Python-Skripts für das Temperaturmesssystem mit MQTT und Ventilatorsteuerung
@@ -716,7 +750,7 @@ Das Skript kombiniert alle wichtigen Funktionen des Temperaturmesssystems:
 - **Erfassung von Temperatur- und Feuchtigkeitswerten** mit dem **DHT11-Sensor**
 - **Anzeigen der Daten auf zwei OLED-Displays** (SSD1306 und SH1106)
 - **Versenden der Messwerte über MQTT** an einen Broker
-- **Steuerung eines Ventilators über ein Relais**
+- **Steuerung eines Ventilators über ein Relais bzw. manuell über die App**
 - **Speicherung der Daten in einer InfluxDB-Datenbank**
 - **Senden der Temperaturwerte an einen Apache2-Webserver**
 
@@ -746,6 +780,21 @@ Diese Bibliotheken werden für folgende Funktionen genutzt:
 - `RPi.GPIO` → Steuerung des **Ventilators über ein Relais**
 - `requests` → Kommunikation mit einer InfluxDB und einem Apache2-Webserver
 - `subprocess` → Senden von **MQTT-Nachrichten** mit `mosquitto_pub`
+
+##### Zentrale IP-Zuweisung:
+
+```python
+SERVER_IP = "IP-Adresse"
+```
+
+- Server IP wird als Variable `Server_IP` gespeichert und später verwendet.
+
+##### Globale Variable für den Ventilator-Status:
+
+```python
+ventilator_manual_mode = False
+```
+- setzt einen manuellen Modus ein, der die temperaturbasierte Steuerung überschreibt, bis **"Ventilator AUS"** empfangen wird.
 
 ##### DHT11-Sensor einrichten:
 
@@ -792,7 +841,7 @@ font = ImageFont.load_default()
 ##### MQTT-Konfiguration:
 
 ```python
-mqtt_broker = "IP-Adresse"
+mqtt_broker = Server_IP
 mqtt_port = "1883"
 mqtt_topic_temp = "DHT11/Temperatur"
 mqtt_topic_humidity = "DHT11/Luftfeuchtigkeit"
@@ -813,6 +862,38 @@ GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 - Das **Relais wird an GPIO 18 gesteuert**.
 - **Standardzustand: Relais ist AUS (GPIO HIGH)**, der Ventilator ist inaktiv.
+
+##### Funktion zur Ventilatorsteuerung:
+
+```python
+def subscribe_and_check_ventilator():
+    global ventilator_manual_mode
+    try:
+        result = subprocess.run(
+            ["mosquitto_sub", "-h", mqtt_broker, "-p", mqtt_port, "-t", "Ventilator", "-C", "1"],
+            capture_output=True,
+            text=True,
+            timeout=1
+        )
+        if result.stdout:
+            message = result.stdout.strip()
+            if message == "Ventilator AN":
+                ventilator_manual_mode = True
+                GPIO.output(RELAY_PIN, GPIO.LOW)
+                print("Ventilator wurde manuell eingeschaltet")
+            elif message == "Ventilator AUS":
+                ventilator_manual_mode = False
+                GPIO.output(RELAY_PIN, GPIO.HIGH)
+                print("Ventilator wurde manuell ausgeschaltet")
+    except subprocess.TimeoutExpired:
+        pass
+    except Exception as e:
+        print(f"Fehler beim MQTT Subscribe: {e}")
+```
+
+
+- Der Ventilator wird angeschaltet, wenn bei abonnierten Thema "Ventilator" die Nachricht kommt **"Ventilator AN"** und auch dann nur ausgeschaltet wenn die Nachricht **"Ventilator AUS"** kommt.
+ 	
 
 ##### MQTT-Nachrichten senden:
 
@@ -895,24 +976,26 @@ def update_small_display():
 - **Aktualisiert das Display mit `oled_small.show()`**.
 - **Wartet 0,5 Sekunden**, um das Flackern zu reduzieren.
 
-##### Funktion zur Ventilatorsteuerung:
+##### Temperaturprüfung und Ventilatorsteuerung:
 
 ```python
-def stop_fan_for_2_seconds():
-    print("Ventilator wird gestartet...")
-    GPIO.output(RELAY_PIN, GPIO.LOW)
-    time.sleep(2)
-    GPIO.output(RELAY_PIN, GPIO.HIGH)
-    print("Ventilator wird gestoppt.")
+def check_temperature_and_control_fan(temperature):
+    if not ventilator_manual_mode:  # Nur prüfen wenn nicht manuell gesteuert
+        if temperature > 25.0:
+            GPIO.output(RELAY_PIN, GPIO.LOW)
+            print(f"Temperatur {temperature}°C über 25°C - Ventilator eingeschaltet")
+        else:
+            GPIO.output(RELAY_PIN, GPIO.HIGH)
+            print(f"Temperatur {temperature}°C unter 25°C - Ventilator ausgeschaltet")
 ```
 
-- Der **Ventilator wird für 2 Sekunden eingeschaltet** und dann **wieder ausgeschaltet**
+- Ventilator wird (wenn manual_mode auf `false` ist) bei einer Temperatur von 25°C automatisch angeschaltet und erst ausgeschaltet wenn die Temperatur unter 25°C ist.
 
 ##### Funktion zum Senden der Temperatur an den Webserver (Optional):
 
 ```python
 def send_temperature_to_webserver(temp):
-    url = f"http://IP-Adresse/temperatur/include/temp_api.php?temp={temp}"
+    url = f"http://{Server_IP}/temperatur/include/temp_api.php?temp={temp}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -948,8 +1031,10 @@ try:
                 if count % 5 == 0:
                     publish_mqtt_message(mqtt_topic_temp, f"{temperature:.1f}")
                     publish_mqtt_message(mqtt_topic_humidity, f"{humidity:.1f}")
-                    stop_fan_for_2_seconds()
+                    check_temperature_and_control_fan(temperature)
                     update_large_display(temperature, humidity)
+                    update_small_display()
+                    send_temperature_to_webserver(temperature)
 
             else:
                 print("Fehler beim Lesen des DHT11-Sensors!")
@@ -957,6 +1042,7 @@ try:
         except RuntimeError as error:
             print(f"Lesefehler: {error}")
 
+        subscribe_and_check_ventilator()
         time.sleep(1)
 ```
 
@@ -965,8 +1051,9 @@ try:
 1. **Liest jede Sekunde Temperatur & Luftfeuchtigkeit aus**.
 2. **Jede 5. Messung**:
     - **MQTT-Nachricht senden**
-    - **Ventilator aktivieren**
     - **Display aktualisieren**
+    - **Temperatur überprüfen**
+    - **Messung an Webserver senden**
 
 ##### Beenden des Programms:
 
