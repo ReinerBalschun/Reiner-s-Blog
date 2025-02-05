@@ -1,4 +1,6 @@
 
+**ALT**
+
 Plan ist alles über Container zu verwalten, sodass es beim Wechsel des Servers alles einfach migrierbar ist:
 
 ![[Pasted image 20240920125541.png]]
