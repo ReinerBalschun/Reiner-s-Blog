@@ -26,3 +26,6 @@ Hi hier ist Reiner hoffe dir geht es gut 👾.
 
 > [!changelog]- Update 15.10.2024
 > Großes quartz 4.4.0 Update! Hab nun endlich es geschaft Kommentare zu implementieren mehr infos [hier](https://giscus.app/de). Außerdem habe ich Backlinks deaktiviert, da ich keine wirklich benutze.  
+
+> [!Update]- Update 10.02.2025
+> Mein Projekt zum Temperaturmesssystem ist nun nach 3 Monaten Schulzeit fertig! Mehr Infos dazu [hier](Projects/Temperaturmesssystem%20Inkl.%20React-Native%20APP.md)
