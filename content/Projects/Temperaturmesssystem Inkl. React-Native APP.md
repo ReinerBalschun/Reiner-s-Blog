@@ -341,7 +341,7 @@ Der **Ventilator** wird über das **Relais-Modul** geschaltet und erhält seinen
 
 |Ventilator-Kabel|Verbindung|
 |---|---|
-|Rotes Kabel (+)|Relais-Ausgang (NO – Normally Open)|
+|Rotes Kabel (+)|Relais-Ausgang (NC – Normally Closed)|
 |Schwarzes Kabel (-)|**GND vom externen Netzteil**|
 
 Der Ventilator wird nur eingeschaltet, wenn das Relais durch das Python-Skript oder die **React Native App über MQTT** aktiviert wird.
