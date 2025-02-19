@@ -321,6 +321,7 @@ Der **DHT11** besteht aus drei Hauptkomponenten:
 2. Die Widerstandsänderung wird mit der **Steinhart-Hart-Gleichung** berechnet:
 
 $$ T(K) = \frac{1}{A + B \cdot \ln(R) + C \cdot (\ln(R))^3} $$
+
 3. Der Wert wird in **Kelvin (K)** berechnet und anschließend in **Grad Celsius (°C)** umgewandelt:
    
    $$T(°C) = T(K) - 273.15$$
@@ -346,8 +347,7 @@ $$\text{40-Bit-Nachricht} = \text{[8 Bit Feuchtigkeit]} + \text{[8 Bit Temperatu
 1. Die 16 Bit die für den Nachkommastellen eigentlich verwendet werden werden zwar mit gesendet, aber nicht vom DHT11 unterstützt Modelle wie der DHT22 können Nachkommastellen
 2. Die Prüfsummer gib sich aus der Addition aller 32 Bits geteilt durch 256:
    
-   $$\text{Prüfsumme} = (48 + 0 + 25 + 0) \mod 256$$
-$$\text{Prüfsumme} = 73$$
+   $$\text{Prüfsumme} = (48 + 0 + 25 + 0) \mod 256 = 73$$
 
 1. Beim Empfänger (Raspberry Pi) wird die gleiche Rechnung durchgeführt, durch die Adafruit Bibliothek.
 2. Falls die berechnete Prüfsumme **nicht mit der empfangenen Prüfsumme übereinstimmt**, gab es einen Übertragungsfehler.
