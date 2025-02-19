@@ -309,7 +309,7 @@ Die Verbindung der Komponenten erfolgt über ein **Breadboard**, damit Änderung
 | NC         | nicht angeschlossen    |
 | GND        | GND (Pin 9 am Pi)      |
 
-###### 🔧 Aufbau des DHT11-Sensors 
+###### Aufbau des DHT11-Sensors 
 Der **DHT11** besteht aus drei Hauptkomponenten: 
 1. **Kapazitiver Feuchtigkeitssensor** – Misst die relative Luftfeuchtigkeit. 
 2. **NTC-Thermistor** – Misst die Temperatur. (NTC = Negative Temperature Coefficient)
