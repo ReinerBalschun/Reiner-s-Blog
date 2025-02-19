@@ -302,13 +302,55 @@ Die Verbindung der Komponenten erfolgt über ein **Breadboard**, damit Änderung
 
 ##### DHT11-Sensor (Temperatur & Luftfeuchtigkeit)
 
-|DHT11-Pin|Verbindung|
-|---|---|
-|VCC|3.3V (Pin 1 am Pi)|
-|GND|GND (Pin 9 am Pi)|
-|DATA|GPIO 17 (Pin 11 am Pi)|
+| DHT11-Pins | Verbindung             |
+| ---------- | ---------------------- |
+| VCC        | 3.3V (Pin 1 am Pi)     |
+| DATA       | GPIO 17 (Pin 11 am Pi) |
+| NC         | nicht angeschlossen    |
+| GND        | GND (Pin 9 am Pi)      |
 
-Der DHT11 benötigt keinen externen Widerstand, da er bereits einen internen Pull-Up-Widerstand besitzt.
+###### 🔧 Aufbau des DHT11-Sensors 
+Der **DHT11** besteht aus drei Hauptkomponenten: 
+1. **Kapazitiver Feuchtigkeitssensor** – Misst die relative Luftfeuchtigkeit. 
+2. **NTC-Thermistor** – Misst die Temperatur. (NTC = Negative Temperature Coefficient)
+3. **Mikrocontroller** – Wandelt die Messwerte in digitale Signale um und sendet sie über das **1-Wire-Protokoll**.
+
+
+###### Wie misst der DHT11 Temperatur? 
+1. Der **NTC-Thermistor** im Sensor verändert seinen Widerstand abhängig von der Temperatur. 
+2. Die Widerstandsänderung wird mit der **Steinhart-Hart-Gleichung** berechnet:
+
+$$ T(K) = \frac{1}{A + B \cdot \ln(R) + C \cdot (\ln(R))^3} $$
+3. Der Wert wird in **Kelvin (K)** berechnet und anschließend in **Grad Celsius (°C)** umgewandelt:
+   
+   $$T(°C) = T(K) - 273.15$$
+
+###### Wie misst der DHT11 Luftfeuchtigkeit? 
+1. Der Sensor nutzt einen **kapazitiven Feuchtigkeitssensor**, der mit einem hygroskopischen Polymer beschichtet ist. 
+2. Das Polymer nimmt Wasser aus der Luft auf, wodurch sich die **elektrische Kapazität** ändert. 
+3. Diese Änderung wird in **relative Luftfeuchtigkeit (%)** umgerechnet: 
+   
+$$RL = \frac{C_{\text{gemessen}} - C_{\text{trocken}}}{C_{\text{feucht}} - C_{\text{trocken}}} \times 100$$
+
+###### Wie funktioniert die Datenübertragung
+1. Der **Mikrocontroller sendet die Daten digital** an den Raspberry Pi mithilfe des 1-Wire-Protokoll über den DATA Pin.
+2. Gesendet wird eine 40-Bit-Nachricht:
+   
+$$\text{40-Bit-Nachricht} = \text{[8 Bit Feuchtigkeit]} + \text{[8 Bit Temperatur]} + \text{[16 Bit Reserved]} + \text{[8 Bit Prüfsumme]}$$
+
+3. Hier ist einmal ein Beispiel mit einer Temperatur 25°C & Luftfeuchtigkeit 48%:
+ 
+| Bit 1-8 (Feuchtigkeit Ganzzahl) | Bit 9-16 (Feuchtigkeit Nachkommastellen) | Bit 17-24 (Temperatur Ganzzahl) | Bit 25-32 (Temperatur Nachkommastellen) | Bit 33-40 (Prüfsumme) |
+| ------------------------------- | ---------------------------------------- | ------------------------------- | --------------------------------------- | --------------------- |
+| `00110000` (48%)                | `00000000` (0)                           | `00011001` (25°C)               | `00000000` (0)                          | `01100001` (73)       |
+1. Die 16 Bit die für den Nachkommastellen eigentlich verwendet werden werden zwar mit gesendet, aber nicht vom DHT11 unterstützt Modelle wie der DHT22 können Nachkommastellen
+2. Die Prüfsummer gib sich aus der Addition aller 32 Bits geteilt durch 256:
+   
+   $$\text{Prüfsumme} = (48 + 0 + 25 + 0) \mod 256$$
+$$\text{Prüfsumme} = 73$$
+
+1. Beim Empfänger (Raspberry Pi) wird die gleiche Rechnung durchgeführt, durch die Adafruit Bibliothek.
+2. Falls die berechnete Prüfsumme **nicht mit der empfangenen Prüfsumme übereinstimmt**, gab es einen Übertragungsfehler.
 
 ##### SSD1306-OLED-Displays (64x48 und 128x64)
 
