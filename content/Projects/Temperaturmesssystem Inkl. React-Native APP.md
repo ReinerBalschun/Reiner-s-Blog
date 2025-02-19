@@ -1055,7 +1055,10 @@ def send_temperature_to_webserver(temp):
     - Falls ein **Fehlercode** zurückkommt (z. B. 404 oder 500), wird eine Meldung ausgegeben.
     - Falls die **Verbindung fehlschlägt** (z. B. weil der Server nicht läuft), wird eine **Exception abgefangen**.
 
-*Hinweis*: Dies ist Optional hatte den Webserver hinzugefügt, sodass man auch eine Alternative zum MQTT Protokoll hat im Skript. 
+*Hinweis*: Dies ist Optional hatte den Webserver hinzugefügt, sodass man auch eine Alternative zum MQTT Protokoll hat im Skript.
+
+![[Pasted image 20250219100600.png | 500]]
+
 ##### Hauptschleife zur Sensordatenerfassung:
 
 ```python
@@ -1128,3 +1131,31 @@ Wenn ich dann auf den jeweiligen Button drücke sendet der eine Publish Nachrich
 Die Nachricht geht an den Broker mit dem Payload, dass der Ventilator entweder eingeschaltet werden soll oder ausgeschaltet. Der Broker ist dann automatisch auf mit meiner InfluxDB Datenbank verbunden via NodeRED, um die Einträge für die Zurücksendung zu speichern.
 
 ![[Pasted image 20250204215125.png | 300]]
+
+---
+### Fazit
+
+#### Was gut funktioniert hat
+Während der Umsetzung des Temperaturmesssystems gab es mehrere Aspekte, die besonders gut funktioniert haben:
+- **Erfolgreiche MQTT-Integration:** Die Kommunikation zwischen den einzelnen Komponenten über den **Mosquitto MQTT-Broker** verlief reibungslos. Die Sensorwerte wurden zuverlässig übermittelt und konnten ohne Verzögerungen an den entsprechenden Services weitergeleitet werden.
+- **Stabile Kommunikation zwischen allen Services:** Die einzelnen Dienste – **MQTT, Node-RED, InfluxDB und Grafana** – arbeiteten sehr gut zusammen. Die Sensordaten wurden zuverlässig gespeichert und in Echtzeit in der Visualisierung dargestellt.
+
+#### Herausforderungen während der Umsetzung
+Trotz des insgesamt erfolgreichen Projekts gab es einige Herausforderungen, die mehr Zeit in Anspruch nahmen als erwartet:
+- **Python-Skript und Display-Bibliotheken:**  
+  Die Einbindung der **beiden unterschiedlichen OLED-Displays (SSD1306 & SH1106)** war problematisch. Die unterschiedlichen **Python-Bibliotheken (luma.oled & adafruit_ssd1306)** hatten **unterschiedliche API-Strukturen**, was dazu führte, dass das Skript mehrfach angepasst und getestet werden musste.  
+- **Begrenzungen des DHT11-Sensors:**  
+  Da der **DHT11 keine Nachkommastellen messen kann**, gingen genauere Messwerte verloren. Beim nächsten Mal wäre es sinnvoll, einen **DHT22** oder einen **BME280** zu verwenden, um präzisere Temperatur- und Feuchtigkeitswerte zu erhalten.  
+- **Probleme mit der React Native App auf Android:**  
+  Während der Entwicklung der **React Native App** gab es **mehrere Android-spezifische Probleme**, die wiederholt Debugging erforderten. Dies führte zu Verzögerungen, da Lösungen gefunden werden mussten, um plattformspezifische Fehler zu umgehen.  
+  → **Für zukünftige Projekte sollte geprüft werden, ob eine alternative Technologie für die App-Entwicklung** (z. B. Flutter oder eine native Android-App) möglicherweise weniger Probleme bereitet.  
+
+#### Ausblick & Optimierungsmöglichkeiten
+Falls das Projekt in der Zukunft erneut umgesetzt wird, gibt es einige Verbesserungsmöglichkeiten:
+- Verwendung eines **genaueren Sensors (DHT22 oder BME280)** für präzisere Messwerte.
+- **Vereinheitlichung der Display-Bibliotheken**, um Kompatibilitätsprobleme zu vermeiden.
+- **Alternative Plattform für die App-Entwicklung prüfen**, um Android-spezifische Probleme zu reduzieren.
+- Erweiterung des Systems um zusätzliche **IoT-Sensoren** oder Steuerungsmöglichkeiten für weitere Geräte.
+
+#### Endfazit
+Insgesamt war das Projekt **erfolgreich** und hat gezeigt, dass ein **vollständig integriertes IoT-System mit MQTT und Grafana** auf einem Raspberry Pi gut realisierbar ist. Trotz einiger Herausforderungen konnten alle geplanten Funktionen umgesetzt und getestet werden.
